@@ -23,15 +23,20 @@ export default function Home({ user }) {
 
   useEffect(() => {
     const fetchStudyRecords = async () => {
-      const { data, error } = await supabase.from('study_records').select('*');
-      console.log(data);
+      const { data, error } = await supabase
+        .from('study_records')
+        .select(`study_date, count, study_material(title)`);
+
       if (error) {
         console.error('Error fetching records:', error);
       } else {
-        setRecords(data);
+        const flatData = data.map((item) => ({
+          study_date: item.study_date,
+          count: item.count,
+          title: item.study_material?.title ?? null,
+        }));
+        setRecords(flatData);
       }
-      ``;
-      console.log(records);
     };
     fetchStudyRecords();
   }, []);
@@ -44,6 +49,13 @@ export default function Home({ user }) {
           <p>You are logged in as {user.email}</p>
           <button onClick={() => navigate('/profile')}>Go to Profile</button>
           <button onClick={signOut}>Sign Out</button>
+          {records.map((data, index) => (
+            <div key={index}>
+              <p>
+                {data.title}, {data.study_date}, {data.count}
+              </p>
+            </div>
+          ))}
         </>
       ) : (
         <div id="login-popup">
