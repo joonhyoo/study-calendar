@@ -18,7 +18,6 @@ export default function Home({ user }) {
   const signOut = async () => {
     await supabase.auth.signOut();
   };
-
   const [records, setRecords] = useState([]);
 
   useEffect(() => {
@@ -30,12 +29,43 @@ export default function Home({ user }) {
       if (error) {
         console.error('Error fetching records:', error);
       } else {
+        const test = [];
+        const curr = new Date();
+        for (let x = 0; x < 300; x++) {
+          const temp = { study_date: curr.toISOString().split('T')[0] };
+          test.push(temp);
+          curr.setDate(curr.getDate() - 1);
+        }
+
         const flatData = data.map((item) => ({
           study_date: item.study_date,
           count: item.count,
           title: item.study_material?.title ?? null,
         }));
-        setRecords(flatData);
+
+        // Step 1: Convert grouped data to a map for fast lookup
+        const groupedMap = {};
+
+        flatData.forEach(({ study_date, title, count }) => {
+          if (!groupedMap[study_date]) {
+            groupedMap[study_date] = [];
+          }
+          groupedMap[study_date].push({ title, count });
+        });
+
+        // Step 2: Create merged array using the 300-day test list
+        const merged = test.map(({ study_date }) => {
+          const records = groupedMap[study_date] ?? [];
+          const total = records.reduce((sum, record) => sum + record.count, 0);
+
+          return {
+            study_date,
+            records,
+            total,
+          };
+        });
+        console.log(merged);
+        setRecords(merged);
       }
     };
     fetchStudyRecords();
@@ -49,13 +79,22 @@ export default function Home({ user }) {
           <p>You are logged in as {user.email}</p>
           <button onClick={() => navigate('/profile')}>Go to Profile</button>
           <button onClick={signOut}>Sign Out</button>
-          {records.map((data, index) => (
-            <div key={index}>
-              <p>
-                {data.title}, {data.study_date}, {data.count}
-              </p>
-            </div>
-          ))}
+          <div id="study-table">
+            {records.map((data, index) => (
+              <div
+                key={index}
+                style={{
+                  backgroundColor: 'light-gray',
+                  textAlign: 'center',
+                  alignContent: 'center',
+                  height: '30px',
+                  width: '30px',
+                }}
+              >
+                {data.total}
+              </div>
+            ))}
+          </div>
         </>
       ) : (
         <div id="login-popup">
