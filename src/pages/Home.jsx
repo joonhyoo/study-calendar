@@ -5,6 +5,7 @@ import '../styles/Home.css';
 
 export default function Home({ user }) {
   const navigate = useNavigate();
+  const [currRecord, setCurrRecord] = useState(null);
 
   const signInWithGitHub = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -64,8 +65,11 @@ export default function Home({ user }) {
             total,
           };
         });
-        console.log(merged);
-        setRecords(merged);
+        setRecords(
+          merged.sort(
+            (a, b) => Date.parse(a.study_date) - Date.parse(b.study_date)
+          )
+        );
       }
     };
     fetchStudyRecords();
@@ -81,20 +85,35 @@ export default function Home({ user }) {
           <button onClick={signOut}>Sign Out</button>
           <div id="study-table">
             {records.map((data, index) => (
+              /*
+                i think i need to make each of the boxes it's own class
+                then i can use states for each of the items to set color
+              */
               <div
                 key={index}
                 style={{
-                  backgroundColor: 'light-gray',
-                  textAlign: 'center',
-                  alignContent: 'center',
-                  height: '30px',
-                  width: '30px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '3px',
+                  aspectRatio: 1,
                 }}
+                onMouseEnter={() => setCurrRecord(data)}
               >
                 {data.total}
               </div>
             ))}
           </div>
+          {currRecord && (
+            <div>
+              <h1>{currRecord.study_date}</h1>
+              {currRecord.records.map((record) => (
+                <div>
+                  {record.title} {record.count}
+                </div>
+              ))}
+            </div>
+          )}
         </>
       ) : (
         <div id="login-popup">

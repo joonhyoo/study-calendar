@@ -46,7 +46,7 @@
   overflow-x: auto;
   grid-auto-flow: column;
   grid-template-rows: auto auto auto auto auto;
-  gap: 5px;
+  gap: 4px;
   height: 200px;
   width: 80vw;
 }
