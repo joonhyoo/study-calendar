@@ -12,7 +12,6 @@ function App() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
-      console.log(user);
       setLoading(false);
     });
 
