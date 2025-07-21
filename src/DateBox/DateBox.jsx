@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import './DateBox.css';
 
 function DateBox({ data, setCurrRecord }) {
   const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
@@ -12,17 +12,14 @@ function DateBox({ data, setCurrRecord }) {
 
   return (
     <div
+      id="date-box"
+      className="unselectable"
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '3px',
         backgroundColor: bgColor,
-        aspectRatio: 1,
       }}
       onMouseEnter={() => setCurrRecord(data)}
     >
-      {data.total}
+      <p>{data.total}</p>
     </div>
   );
 }

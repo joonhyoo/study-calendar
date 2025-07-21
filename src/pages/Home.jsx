@@ -2,7 +2,7 @@ import supabase from '../utils/supabase';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../styles/Home.css';
-import DateBox from '../components/DateBox';
+import DateBox from '../DateBox/DateBox';
 
 export default function Home({ user }) {
   const navigate = useNavigate();
