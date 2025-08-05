@@ -69,6 +69,7 @@ export default function Home({ user }) {
         };
       });
 
+      // sorts them newest -> oldest because they get placed in reverse
       const sortedList = merged.sort(
         (a, b) => Date.parse(a.study_date) - Date.parse(b.study_date)
       );

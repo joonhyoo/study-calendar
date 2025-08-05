@@ -47,6 +47,5 @@
   grid-auto-flow: column;
   grid-template-rows: auto auto auto auto auto;
   gap: 4px;
-  height: 200px;
   width: 80vw;
 }
