@@ -22,61 +22,6 @@ export default function Home({ user }) {
   };
   const [records, setRecords] = useState([]);
 
-  const fetchStudyRecords = async () => {
-    const { data, error } = await supabase
-      .from('study_records')
-      .select(`study_date, count, study_material(title)`);
-
-    if (error) {
-      console.error('Error fetching records:', error);
-    } else {
-      const test = [];
-      const curr = new Date();
-      for (let x = 0; x < 300; x++) {
-        const temp = { study_date: curr.toISOString().split('T')[0] };
-        test.push(temp);
-        curr.setDate(curr.getDate() - 1);
-      }
-
-      const flatData = data.map((item) => ({
-        study_date: item.study_date,
-        count: item.count,
-        title: item.study_material?.title ?? null,
-      }));
-
-      // Step 1: Convert grouped data to a map for fast lookup
-      const groupedMap = {};
-      let max = 0;
-
-      flatData.forEach(({ study_date, title, count }) => {
-        if (!groupedMap[study_date]) {
-          groupedMap[study_date] = [];
-        }
-        max = count > max ? count : max;
-        groupedMap[study_date].push({ title, count });
-      });
-
-      // Step 2: Create merged array using the 300-day test list
-      const merged = test.map(({ study_date }) => {
-        const records = groupedMap[study_date] ?? [];
-        const total = records.reduce((sum, record) => sum + record.count, 0);
-        const ratio = total / max;
-        return {
-          study_date,
-          records,
-          total,
-          ratio,
-        };
-      });
-
-      // sorts them newest -> oldest because they get placed in reverse
-      const sortedList = merged.sort(
-        (a, b) => Date.parse(a.study_date) - Date.parse(b.study_date)
-      );
-      return sortedList;
-    }
-  };
-
   useEffect(() => {
     // check session storage
     // if exists => pull that data
@@ -85,9 +30,10 @@ export default function Home({ user }) {
       setRecords(storedRecords);
     } else {
       // else fetches session storage records
-      fetchStudyRecords().then((data) => {
-        setRecords(data);
-      });
+      supabase.functions
+        .invoke('fetch-study-records')
+        .then((res) => setRecords(res.data.sortedList))
+        .catch((err) => console.log(err));
     }
   }, []);
 
