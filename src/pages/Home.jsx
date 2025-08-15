@@ -3,19 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../styles/Home.css';
 import DateBox from '../DateBox/DateBox';
+import GithubLogin from '../Login/GithubLogin';
 
 export default function Home({ user }) {
   const navigate = useNavigate();
   const [currRecord, setCurrRecord] = useState(null);
-
-  const signInWithGitHub = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-    });
-
-    console.log('data:', data);
-    console.log('error:', error);
-  };
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -24,8 +16,8 @@ export default function Home({ user }) {
 
   useEffect(() => {
     // check session storage
-    // if exists => pull that data
     const storedRecords = sessionStorage.getItem('records');
+    // if exists => pull that data
     if (storedRecords) {
       setRecords(storedRecords);
     } else {
@@ -62,17 +54,7 @@ export default function Home({ user }) {
           )}
         </>
       ) : (
-        <div id="login-popup">
-          <h1 className="mini-logo">:&#62;</h1>
-          <p id="sign-in-text">sign in to continue</p>
-          <button id="login-button" onClick={signInWithGitHub}>
-            Sign In with GitHub
-            <img
-              id="github-logo-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/1200px-Octicons-mark-github.svg.png?20180806170715"
-            />
-          </button>
-        </div>
+        <GithubLogin />
       )}
     </div>
   );
