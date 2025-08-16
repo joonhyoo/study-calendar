@@ -18,12 +18,19 @@ export default function Home({ user }) {
     const storedRecords = sessionStorage.getItem('records');
     // if exists => pull that data
     if (storedRecords) {
-      setRecords(storedRecords);
+      const parsedData = JSON.parse(storedRecords);
+      setRecords(parsedData);
     } else {
       // else fetches session storage records
+      console.log('invoked');
       supabase.functions
         .invoke('fetch-study-records')
-        .then((res) => setRecords(res.data.sortedList))
+        .then((res) => {
+          const fetchedData = res.data.sortedList;
+          setRecords(fetchedData);
+          const jsonData = JSON.stringify(fetchedData);
+          sessionStorage.setItem('records', jsonData);
+        })
         .catch((err) => console.log(err));
     }
   }, []);

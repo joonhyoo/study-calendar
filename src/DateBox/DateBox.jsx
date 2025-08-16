@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './DateBox.css';
 
-function DateBox({ data }) {
+function DateBox({ data, width }) {
   const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
 
   useEffect(() => {
@@ -16,6 +16,7 @@ function DateBox({ data }) {
       className="unselectable"
       style={{
         backgroundColor: bgColor,
+        width: width,
       }}
     >
       {/* <p>{data.total}</p> */}
