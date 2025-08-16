@@ -1,8 +1,7 @@
-#study-table {
-  display: grid;
-  overflow-x: auto;
-  grid-auto-flow: column;
-  grid-template-rows: auto auto auto auto auto;
-  gap: 4px;
-  width: 80vw;
+#main-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 366px;
+  padding: 64px 32px;
 }

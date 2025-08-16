@@ -1,0 +1,16 @@
+.tracking-container {
+  background-color: #323334;
+  padding: 24px;
+}
+
+.tracking-calendar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto auto auto auto auto auto;
+  gap: 4px;
+  padding-top: 24px;
+}
+
+.tracker-title {
+  width: 100%;
+}

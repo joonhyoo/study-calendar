@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './DateBox.css';
 
-function DateBox({ data, setCurrRecord }) {
+function DateBox({ data }) {
   const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
 
   useEffect(() => {
@@ -17,9 +17,8 @@ function DateBox({ data, setCurrRecord }) {
       style={{
         backgroundColor: bgColor,
       }}
-      onMouseEnter={() => setCurrRecord(data)}
     >
-      <p>{data.total}</p>
+      {/* <p>{data.total}</p> */}
     </div>
   );
 }
