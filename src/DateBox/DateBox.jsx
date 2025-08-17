@@ -7,8 +7,10 @@ function DateBox({ data, width }) {
   useEffect(() => {
     if (data.ratio) {
       setBgColor('rgba(144, 238, 144, ' + data.ratio + ')');
+    } else {
+      setBgColor('#C4C4C4');
     }
-  }, [data]);
+  }, [data, bgColor]);
 
   return (
     <div
@@ -17,10 +19,9 @@ function DateBox({ data, width }) {
       style={{
         backgroundColor: bgColor,
         width: width,
+        height: width,
       }}
-    >
-      {/* <p>{data.total}</p> */}
-    </div>
+    ></div>
   );
 }
 

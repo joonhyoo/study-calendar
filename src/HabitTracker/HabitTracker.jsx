@@ -3,28 +3,59 @@ import DateBox from '../DateBox/DateBox';
 import { useEffect, useRef, useState } from 'react';
 
 function HabitTracker({ title, records }) {
-  const [availCols, setAvailCols] = useState(0);
-  const today = new Date().toLocaleDateString('en-us');
-
+  const [splicedRecords, setSplicedRecords] = useState(records);
+  const [todaysData, setTodaysData] = useState(null);
+  const boxWidth = 16;
   const ref = useRef(null);
+
+  const findMax = (updatedRecords) => {
+    let max = 0;
+    for (const rec of updatedRecords) {
+      max = max > rec.total ? max : rec.total;
+    }
+    return max;
+  };
 
   useEffect(() => {
     const handleResize = () => {
+      if (!ref.current) return;
       const currWidth = ref.current.clientWidth;
-      setAvailCols(Math.floor((currWidth - 16) / 20) + 1);
+      const availCols = Math.max(
+        1,
+        Math.floor((currWidth - boxWidth) / (boxWidth + 4)) + 1
+      );
+      const tempRecords = records.slice(-availCols * 7);
+      setTodaysData(tempRecords[tempRecords.length - 1]);
+      updateRatio(tempRecords);
+      setSplicedRecords(tempRecords);
     };
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+
+    const updateRatio = (updatedRecords) => {
+      const max = findMax(updatedRecords);
+      for (const rec of updatedRecords) {
+        rec['ratio'] = rec.total / max;
+      }
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (ref.current) {
+        handleResize();
+      }
+    });
+    resizeObserver.observe(ref.current);
+
+    return () => resizeObserver.disconnect();
+  }, [records]);
 
   return (
     <div className="tracking-container">
-      <h2 className="white-text tracker-title">{title}</h2>
-      <div>{(availCols, today)}</div>
+      <div style={{ display: 'flex' }}>
+        <h2 className="white-text tracker-title">{title}</h2>
+        {todaysData && <DateBox data={todaysData} width={25} />}
+      </div>
       <div className="tracking-calendar" ref={ref}>
-        {records.slice(-availCols * 7).map((data, index) => (
-          <DateBox key={index} data={data} width={'16px'} />
+        {splicedRecords.map((data, index) => (
+          <DateBox key={index} data={data} width={boxWidth} />
         ))}
       </div>
     </div>

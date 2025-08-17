@@ -13,25 +13,38 @@ export default function Home({ user }) {
   };
   const [records, setRecords] = useState([]);
 
+  const checkDataValid = (data) => {
+    if (data) {
+      const today = new Date().toISOString().split('T')[0];
+      const lastDate = data[data.length - 1].study_date;
+      return today === lastDate;
+    }
+    return false;
+  };
+
+  const fetchData = () => {
+    supabase.functions
+      .invoke('fetch-study-records')
+      .then((res) => {
+        const fetchedData = res.data.sortedList;
+        setRecords(fetchedData);
+        const jsonData = JSON.stringify(fetchedData);
+        sessionStorage.setItem('records', jsonData);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     // check session storage
     const storedRecords = sessionStorage.getItem('records');
+    const parsedData = JSON.parse(storedRecords);
+    const dataValid = checkDataValid(parsedData);
     // if exists => pull that data
-    if (storedRecords) {
-      const parsedData = JSON.parse(storedRecords);
+    if (dataValid) {
       setRecords(parsedData);
     } else {
       // else fetches session storage records
-      console.log('invoked');
-      supabase.functions
-        .invoke('fetch-study-records')
-        .then((res) => {
-          const fetchedData = res.data.sortedList;
-          setRecords(fetchedData);
-          const jsonData = JSON.stringify(fetchedData);
-          sessionStorage.setItem('records', jsonData);
-        })
-        .catch((err) => console.log(err));
+      fetchData();
     }
   }, []);
 
