@@ -16,7 +16,7 @@ export default function Home({ user }) {
   const checkDataValid = (data) => {
     if (data) {
       const today = new Date().toISOString().split('T')[0];
-      const lastDate = data[data.length - 1].study_date;
+      const lastDate = data[data.length - 1].created_on;
       return today === lastDate;
     }
     return false;
@@ -24,7 +24,7 @@ export default function Home({ user }) {
 
   const fetchData = () => {
     supabase.functions
-      .invoke('fetch-study-records')
+      .invoke('fetch-records')
       .then((res) => {
         const fetchedData = res.data.sortedList;
         setRecords(fetchedData);
