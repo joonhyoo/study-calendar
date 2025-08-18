@@ -13,21 +13,22 @@ export default function Home({ user }) {
   };
   const [records, setRecords] = useState([]);
 
-  const checkDataValid = (data) => {
+  const checkDataValid = (data, today) => {
     if (data) {
-      const today = new Date().toISOString().split('T')[0];
       const lastDate = data[data.length - 1].created_on;
       return today === lastDate;
     }
     return false;
   };
 
-  const fetchData = () => {
+  const fetchData = (today) => {
+    console.log('evoked');
     supabase.functions
-      .invoke('fetch-records')
+      .invoke(`fetch-records?endDate=${today}`, { method: 'GET' })
       .then((res) => {
         const fetchedData = res.data.sortedList;
         setRecords(fetchedData);
+        console.log(fetchedData);
         const jsonData = JSON.stringify(fetchedData);
         sessionStorage.setItem('records', jsonData);
       })
@@ -36,15 +37,16 @@ export default function Home({ user }) {
 
   useEffect(() => {
     // check session storage
+    const today = new Date().toISOString().split('T')[0];
     const storedRecords = sessionStorage.getItem('records');
     const parsedData = JSON.parse(storedRecords);
-    const dataValid = checkDataValid(parsedData);
+    const dataValid = checkDataValid(parsedData, today);
     // if exists => pull that data
     if (dataValid) {
       setRecords(parsedData);
     } else {
       // else fetches session storage records
-      fetchData();
+      fetchData(today);
     }
   }, []);
 
