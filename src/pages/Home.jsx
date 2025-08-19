@@ -36,9 +36,17 @@ export default function Home({ user }) {
       .catch((err) => console.log(err));
   };
 
+  const getLocalToday = () => {
+    const today = new Date();
+    const currYear = today.getFullYear();
+    const currMonth = String(today.getMonth() + 1).padStart(2, '0');
+    const currDate = String(today.getDate()).padStart(2, '0');
+    return currYear + '-' + currMonth + '-' + currDate;
+  };
+
   useEffect(() => {
     // check session storage
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalToday();
     const storedHabits = sessionStorage.getItem('habits');
     const parsedHabits = JSON.parse(storedHabits);
     const dataValid = checkDataValid(parsedHabits, today);
