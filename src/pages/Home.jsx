@@ -4,33 +4,34 @@ import { useEffect, useState } from 'react';
 import '../styles/Home.css';
 import GithubLogin from '../Login/GithubLogin';
 import HabitTracker from '../HabitTracker/HabitTracker';
+import { formatData } from './helper';
 
 export default function Home({ user }) {
   const navigate = useNavigate();
+  const [habits, setHabits] = useState([]);
 
   const signOut = async () => {
     await supabase.auth.signOut();
   };
-  const [records, setRecords] = useState([]);
 
   const checkDataValid = (data, today) => {
     if (data) {
-      const lastDate = data[data.length - 1].created_on;
+      const records = data[0].records;
+      const lastDate = records[records.length - 1].created_on;
       return today === lastDate;
     }
     return false;
   };
 
-  const fetchData = (today) => {
-    console.log('evoked');
+  const fetchHabits = (today) => {
     supabase.functions
-      .invoke(`fetch-records?endDate=${today}`, { method: 'GET' })
+      .invoke(`fetch-habits?endDate=${today}`, { method: 'GET' })
       .then((res) => {
-        const fetchedData = res.data.sortedList;
-        setRecords(fetchedData);
-        console.log(fetchedData);
-        const jsonData = JSON.stringify(fetchedData);
-        sessionStorage.setItem('records', jsonData);
+        const fetchedHabits = res.data.data;
+        const formattedHabits = formatData(fetchedHabits, today);
+        const JSONHabits = JSON.stringify(formattedHabits);
+        setHabits(formattedHabits);
+        sessionStorage.setItem('habits', JSONHabits);
       })
       .catch((err) => console.log(err));
   };
@@ -38,15 +39,15 @@ export default function Home({ user }) {
   useEffect(() => {
     // check session storage
     const today = new Date().toISOString().split('T')[0];
-    const storedRecords = sessionStorage.getItem('records');
-    const parsedData = JSON.parse(storedRecords);
-    const dataValid = checkDataValid(parsedData, today);
-    // if exists => pull that data
+    const storedHabits = sessionStorage.getItem('habits');
+    const parsedHabits = JSON.parse(storedHabits);
+    const dataValid = checkDataValid(parsedHabits, today);
     if (dataValid) {
-      setRecords(parsedData);
+      // grab session storage data
+      setHabits(parsedHabits);
     } else {
-      // else fetches session storage records
-      fetchData(today);
+      // get data from supabase
+      fetchHabits(today);
     }
   }, []);
 
@@ -58,7 +59,16 @@ export default function Home({ user }) {
           <p>You are logged in as {user.email}</p>
           <button onClick={() => navigate('/profile')}>Go to Profile</button>
           <button onClick={signOut}>Sign Out</button>
-          <HabitTracker title={'Japanese Study'} records={records} />
+          <div id="habits-container">
+            {habits.map((habit, index) => (
+              <HabitTracker
+                key={index}
+                title={habit.title}
+                records={habit.records}
+                rgbColor={habit.rgbColor}
+              />
+            ))}
+          </div>
         </>
       ) : (
         <GithubLogin />

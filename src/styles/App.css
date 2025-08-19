@@ -5,6 +5,12 @@
   padding: 0;
 }
 
+html,
+body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
 body {
   font-family: "Geologica";
   background-color: black;

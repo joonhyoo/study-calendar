@@ -2,10 +2,10 @@ import './HabitTracker.css';
 import DateBox from '../DateBox/DateBox';
 import { useEffect, useRef, useState } from 'react';
 
-function HabitTracker({ title, records }) {
-  const [splicedRecords, setSplicedRecords] = useState(records);
+function HabitTracker({ title, records, rgbColor }) {
+  const [splicedRecords, setSplicedRecords] = useState(null);
   const [todaysData, setTodaysData] = useState(null);
-  const boxWidth = 16;
+  const boxWidth = 12;
   const ref = useRef(null);
 
   const findMax = (updatedRecords) => {
@@ -51,12 +51,20 @@ function HabitTracker({ title, records }) {
     <div className="tracking-container">
       <div style={{ display: 'flex' }}>
         <h2 className="white-text tracker-title">{title}</h2>
-        {todaysData && <DateBox data={todaysData} width={25} />}
+        {todaysData && (
+          <DateBox data={todaysData} width={25} rgbColor={rgbColor} />
+        )}
       </div>
       <div className="tracking-calendar" ref={ref}>
-        {splicedRecords.map((data, index) => (
-          <DateBox key={index} data={data} width={boxWidth} />
-        ))}
+        {splicedRecords &&
+          splicedRecords.map((data, index) => (
+            <DateBox
+              key={index}
+              data={data}
+              width={boxWidth}
+              rgbColor={rgbColor}
+            />
+          ))}
       </div>
     </div>
   );
