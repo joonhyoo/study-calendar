@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import '../styles/Home.css';
 import GithubLogin from '../Login/GithubLogin';
 import HabitTracker from '../HabitTracker/HabitTracker';
-import { formatData } from './helper';
 
 export default function Home({ user }) {
   const navigate = useNavigate();
@@ -27,10 +26,9 @@ export default function Home({ user }) {
     supabase.functions
       .invoke(`fetch-habits?endDate=${today}`, { method: 'GET' })
       .then((res) => {
-        const fetchedHabits = res.data.data;
-        const formattedHabits = formatData(fetchedHabits, today);
-        const JSONHabits = JSON.stringify(formattedHabits);
-        setHabits(formattedHabits);
+        const fetchedHabits = res.data.formattedData;
+        const JSONHabits = JSON.stringify(fetchedHabits);
+        setHabits(fetchedHabits);
         sessionStorage.setItem('habits', JSONHabits);
       })
       .catch((err) => console.log(err));
