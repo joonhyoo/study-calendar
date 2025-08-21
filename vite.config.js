@@ -9,4 +9,5 @@ export default defineConfig({
     port: 5173,
     allowedHosts: ["hyuji-dev.local"],
   },
+  resolve: { alias: { src: "/src" } },
 });

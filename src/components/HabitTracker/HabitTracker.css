@@ -1,0 +1,27 @@
+.tracking-container {
+  background-color: #323334;
+}
+
+.tracking-container:hover {
+  filter: brightness(75%);
+  cursor: pointer;
+}
+
+.tracker-title-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tracker {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tracking-calendar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto auto auto auto auto auto;
+  gap: 4px;
+}

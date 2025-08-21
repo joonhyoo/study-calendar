@@ -1,9 +1,9 @@
-import supabase from '../utils/supabase';
+import supabase from 'src/utils/supabase';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import '../styles/Home.css';
-import GithubLogin from '../Login/GithubLogin';
-import HabitTracker from '../HabitTracker/HabitTracker';
+import 'src/styles/Home.css';
+import { HabitContext } from 'src/contexts/contexts';
+import HabitTracker from 'src/components/HabitTracker/HabitTracker';
 
 export default function Home({ user }) {
   const navigate = useNavigate();
@@ -60,25 +60,16 @@ export default function Home({ user }) {
   return (
     <div id="main-container">
       <h1 className="white-text">Habit Tracker</h1>
-      {user ? (
-        <>
-          <p>You are logged in as {user.email}</p>
-          <button onClick={() => navigate('/profile')}>Go to Profile</button>
-          <button onClick={signOut}>Sign Out</button>
-          <div id="habits-container">
-            {habits.map((habit, index) => (
-              <HabitTracker
-                key={index}
-                title={habit.title}
-                records={habit.records}
-                rgbColor={habit.rgbColor}
-              />
-            ))}
-          </div>
-        </>
-      ) : (
-        <GithubLogin />
-      )}
+      <p className="white-text">You are logged in as {user.email}</p>
+      <button onClick={() => navigate('/profile')}>Go to Profile</button>
+      <button onClick={signOut}>Sign Out</button>
+      <div id="habits-container">
+        {habits.map((habit, index) => (
+          <HabitContext value={habit} key={index}>
+            <HabitTracker />
+          </HabitContext>
+        ))}
+      </div>
     </div>
   );
 }

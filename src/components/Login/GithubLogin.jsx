@@ -1,4 +1,4 @@
-import supabase from '../utils/supabase';
+import supabase from 'src/utils/supabase';
 import './GithubLogin.css';
 
 export default function GithubLogin() {

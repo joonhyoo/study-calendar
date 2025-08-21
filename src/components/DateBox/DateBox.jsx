@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './DateBox.css';
+import { HabitContext } from 'src/contexts/contexts';
 
-function DateBox({ data, width, rgbColor }) {
+function DateBox({ data, width }) {
   const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
-
+  const { rgbColor } = useContext(HabitContext);
   useEffect(() => {
     if (data.ratio) {
       setBgColor('rgba(' + rgbColor + ',' + data.ratio + ')');
@@ -14,8 +15,7 @@ function DateBox({ data, width, rgbColor }) {
 
   return (
     <div
-      id="date-box"
-      className="unselectable"
+      className="date-box"
       style={{
         backgroundColor: bgColor,
         width: width,

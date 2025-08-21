@@ -1,10 +1,15 @@
+import { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './HabitTracker.css';
-import DateBox from '../DateBox/DateBox';
-import { useEffect, useRef, useState } from 'react';
+import DateBox from 'src/components/DateBox/DateBox';
+import DropDown from 'src/components/DropDown/DropDown';
+import { HabitContext } from 'src/contexts/contexts';
 
-function HabitTracker({ title, records, rgbColor }) {
+export default function HabitTracker() {
+  const { title, records, id } = useContext(HabitContext);
   const [splicedRecords, setSplicedRecords] = useState(null);
   const [todaysData, setTodaysData] = useState(null);
+  const navigate = useNavigate();
   const boxWidth = 12;
   const ref = useRef(null);
 
@@ -48,26 +53,25 @@ function HabitTracker({ title, records, rgbColor }) {
   }, [records]);
 
   return (
-    <div className="tracking-container">
-      <div style={{ display: 'flex' }}>
-        <h2 className="white-text tracker-title">{title}</h2>
-        {todaysData && (
-          <DateBox data={todaysData} width={25} rgbColor={rgbColor} />
-        )}
+    <div
+      className="tracking-container"
+      onClick={() => navigate('/habit?id=' + id)}
+    >
+      <div className="tracker">
+        <div className="tracker-title-container">
+          <h2 className="white-text">
+            {title} {id}
+          </h2>
+          {todaysData && <DateBox data={todaysData} width={25} />}
+        </div>
+        <div className="tracking-calendar" ref={ref}>
+          {splicedRecords &&
+            splicedRecords.map((data, index) => (
+              <DateBox key={index} data={data} width={boxWidth} />
+            ))}
+        </div>
       </div>
-      <div className="tracking-calendar" ref={ref}>
-        {splicedRecords &&
-          splicedRecords.map((data, index) => (
-            <DateBox
-              key={index}
-              data={data}
-              width={boxWidth}
-              rgbColor={rgbColor}
-            />
-          ))}
-      </div>
+      <DropDown />
     </div>
   );
 }
-
-export default HabitTracker;
