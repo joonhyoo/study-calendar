@@ -56,7 +56,6 @@ const AppContextProvider = ({ children }) => {
     const handleResize = () => {
       if (!appRef.current) return;
       const currWidth = appRef.current.clientWidth - 64;
-      console.log(currWidth);
       setAvailCols(Math.max(1, Math.floor((currWidth - 12) / (12 + 4)) + 1));
     };
 
@@ -82,12 +81,12 @@ const AppContextProvider = ({ children }) => {
       setDates(tempDates);
     };
     createDates();
+    fetchHabits();
   }, [availCols]);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
-      fetchHabits();
     });
 
     const {
@@ -97,7 +96,7 @@ const AppContextProvider = ({ children }) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [availCols]);
+  }, []);
 
   return (
     <AppContext.Provider value={{ user, habits, fetchTotals, dates }}>
