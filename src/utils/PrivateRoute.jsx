@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import AppContext from 'src/contexts/AppContextProvider';
 
-function PrivateRoute({ element }) {
+function PrivateRoute() {
   const { user } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -15,12 +15,7 @@ function PrivateRoute({ element }) {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  if (user) {
-    return element;
-  } else {
-    return <Navigate to={'/login'} replace />;
-  }
+  return user ? <Outlet /> : <Navigate to={'/login'} replace />;
 }
 
 export default PrivateRoute;

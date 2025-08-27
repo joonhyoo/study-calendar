@@ -9,11 +9,13 @@ import 'src/styles/App.css';
 function App() {
   return (
     <Routes>
-      <Route path="/home" element={<PrivateRoute element={<Home />} />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/habit" element={<PrivateRoute element={<Habit />} />} />
-      <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
-      <Route path="*" element={<Navigate to="/home" replace />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/habit" element={<Habit />} />
+      </Route>
     </Routes>
   );
 }
