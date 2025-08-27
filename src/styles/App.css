@@ -3,21 +3,36 @@
 * {
   margin: 0;
   padding: 0;
+  color: white;
 }
 
 html,
 body {
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
+}
+
+html {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: black;
+  padding: 64px 32px;
 }
 
 body {
   font-family: "Geologica";
-  background-color: black;
+  max-width: 366px;
+  width: 100%;
 }
 
-.white-text {
-  color: white;
+.unstyled-link {
+  text-decoration: none;
+}
+
+.clickable:hover {
+  filter: brightness(75%);
+  cursor: pointer;
 }
 
 .unselectable {

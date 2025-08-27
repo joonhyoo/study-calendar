@@ -1,30 +1,29 @@
 import { useContext, useEffect, useState } from 'react';
 import './DateBox.css';
-import { HabitContext } from 'src/contexts/contexts';
+import HabitContext from 'src/contexts/HabitContextProvider';
 
-function DateBox({ data, width }) {
+function DateBox({ ratio }) {
+  const { habit } = useContext(HabitContext);
+
   const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
-  const { rgbColor } = useContext(HabitContext);
   useEffect(() => {
-    if (data.ratio) {
-      setBgColor('rgba(' + rgbColor + ',' + data.ratio + ')');
-    } else {
+    if (ratio === 0) {
       setBgColor('#C4C4C4');
+    } else {
+      setBgColor('rgba(' + habit.rgbColor + ',' + ratio + ')');
     }
-  }, [data, bgColor, rgbColor]);
+  }, [bgColor, habit.rgbColor, ratio]);
 
   return (
     <div
       className="date-box"
       style={{
         backgroundColor: bgColor,
-        width: width,
-        height: width,
+        width: 12,
+        height: 12,
       }}
-    ></div>
+    />
   );
 }
-
-DateBox.propTypes = {};
 
 export default DateBox;

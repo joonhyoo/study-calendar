@@ -1,10 +1,9 @@
 .tracking-container {
   background-color: #323334;
-}
-
-.tracking-container:hover {
-  filter: brightness(75%);
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
 }
 
 .tracker-title-container {
@@ -12,16 +11,13 @@
   justify-content: space-between;
 }
 
-.tracker {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 .tracking-calendar {
   display: grid;
   grid-auto-flow: column;
-  grid-template-rows: auto auto auto auto auto auto auto;
+  grid-template-rows: repeat(7, auto);
   gap: 4px;
+}
+
+.short {
+  grid-template-rows: auto;
 }

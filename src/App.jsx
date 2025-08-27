@@ -1,42 +1,35 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import 'src/styles/App.css';
-import supabase from 'src/utils/supabase';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 import Home from 'src/pages/Home';
 import Profile from 'src/pages/Profile';
 import Habit from 'src/pages/Habit';
 import GithubLogin from 'src/components/Login/GithubLogin';
+import 'src/styles/App.css';
+import PrivateRoute from './utils/PrivateRoute';
+import AppContext from './contexts/AppContextProvider';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user } = useContext(AppContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  if (loading) return <div>Loading...</div>;
+    if (user && location.pathname === '/login') navigate('/home');
+  }, [user, location, navigate]);
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={user ? <Navigate to="/home" /> : <GithubLogin />}
-      />
-      <Route path="/home" element={<Home user={user} />} />
-      <Route path="/profile" element={<Profile user={user} />} />
-      <Route path="/habit" element={<Habit />} />
+      <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+      <Route path="/login" element={<GithubLogin />} />
+      <Route path="/habit" element={<PrivateRoute element={<Habit />} />} />
+      <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 }

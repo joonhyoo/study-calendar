@@ -1,14 +1,4 @@
-#main-container {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  max-width: 366px;
-  padding: 64px 32px;
-  /* outline: 1px solid white; */
-}
-
 #habits-container {
-  /* outline: 1px solid green; */
   display: flex;
   flex-direction: column;
   gap: 32px;
