@@ -1,7 +1,17 @@
+import { useContext, useEffect } from 'react';
 import supabase from 'src/utils/supabase';
-import './GithubLogin.css';
+import AppContext from 'src/contexts/AppContextProvider';
+import 'src/styles/Login.css';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-export default function GithubLogin() {
+export default function Login() {
+  const { user } = useContext(AppContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) navigate('/home');
+  }, [navigate, user]);
+
   const signInWithGitHub = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',

@@ -1,32 +1,16 @@
-import {
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from 'src/pages/Home';
 import Profile from 'src/pages/Profile';
 import Habit from 'src/pages/Habit';
-import GithubLogin from 'src/components/Login/GithubLogin';
-import 'src/styles/App.css';
 import PrivateRoute from './utils/PrivateRoute';
-import AppContext from './contexts/AppContextProvider';
+import Login from './pages/Login';
+import 'src/styles/App.css';
 
 function App() {
-  const { user } = useContext(AppContext);
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user && location.pathname === '/login') navigate('/home');
-  }, [user, location, navigate]);
-
   return (
     <Routes>
       <Route path="/home" element={<PrivateRoute element={<Home />} />} />
-      <Route path="/login" element={<GithubLogin />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/habit" element={<PrivateRoute element={<Habit />} />} />
       <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
       <Route path="*" element={<Navigate to="/home" replace />} />

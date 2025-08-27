@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import HabitTracker from 'src/components/HabitTracker/HabitTracker';
 import AppContext from 'src/contexts/AppContextProvider';
-import 'src/styles/Home.css';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
+import 'src/styles/Home.css';
 
 export default function Home() {
   const { habits } = useContext(AppContext);
