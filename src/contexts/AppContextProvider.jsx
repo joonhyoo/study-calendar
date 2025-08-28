@@ -84,6 +84,20 @@ const AppContextProvider = ({ children }) => {
     fetchHabits();
   }, [availCols]);
 
+  const signInWithGitHub = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+    });
+
+    if (error) {
+      console.error('GitHub login failed:', error.message);
+    }
+  };
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
@@ -98,8 +112,22 @@ const AppContextProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const fakeLogin = () => {
+    setUser(true);
+  };
+
   return (
-    <AppContext.Provider value={{ user, habits, fetchTotals, dates }}>
+    <AppContext.Provider
+      value={{
+        user,
+        habits,
+        fetchTotals,
+        dates,
+        signInWithGitHub,
+        signOut,
+        fakeLogin,
+      }}
+    >
       <div id="app-container" ref={appRef}>
         {children}
       </div>

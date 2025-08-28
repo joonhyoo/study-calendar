@@ -1,11 +1,10 @@
 import { useContext, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import supabase from 'src/utils/supabase';
+import { useNavigate } from 'react-router-dom';
 import AppContext from 'src/contexts/AppContextProvider';
 import 'src/styles/Login.css';
 
 export default function Login() {
-  const { user } = useContext(AppContext);
+  const { user, signInWithGitHub, fakeLogin } = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,19 +12,6 @@ export default function Login() {
       navigate('/home');
     }
   }, [navigate, user]);
-
-  const signInWithGitHub = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: '/home',
-      },
-    });
-
-    if (error) {
-      console.error('GitHub login failed:', error.message);
-    }
-  };
 
   return (
     <div id="login-popup">
@@ -39,6 +25,7 @@ export default function Login() {
           src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
         />
       </button>
+      <button onClick={fakeLogin}>Fake Login</button>
     </div>
   );
 }

@@ -7,11 +7,8 @@ import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 import 'src/styles/Home.css';
 
 export default function Home() {
-  const { habits } = useContext(AppContext);
+  const { habits, signOut } = useContext(AppContext);
   const navigate = useNavigate();
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  };
 
   return (
     <>
