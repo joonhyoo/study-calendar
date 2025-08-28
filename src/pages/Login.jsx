@@ -7,11 +7,11 @@ export default function Login() {
   const { user, signInWithGitHub, fakeLogin } = useContext(AppContext);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     navigate('/home');
-  //   }
-  // }, [navigate, user]);
+  useEffect(() => {
+    if (user) {
+      navigate('/home');
+    }
+  }, [navigate, user]);
 
   return (
     <div id="login-popup">
