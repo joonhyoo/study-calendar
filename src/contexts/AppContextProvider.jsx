@@ -5,9 +5,10 @@ import supabase from 'src/utils/supabase';
 const AppContext = createContext({});
 
 const AppContextProvider = ({ children }) => {
-  const [user, setUser] = useState(undefined);
+  const [session, setSession] = useState(null);
   const [habits, setHabits] = useState([]);
   const [dates, setDates] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
 
@@ -87,7 +88,7 @@ const AppContextProvider = ({ children }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: window.location.origin, // Ensures session is set on the correct domain
+        redirectTo: `${window.location.origin}/home`,
       },
     });
     if (error) {
@@ -100,40 +101,34 @@ const AppContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Check session on mount
+    session ? setIsLoading(false) : setIsLoading(true);
+  }, [session]);
+
+  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      setSession(session);
     });
 
-    // Listen for auth state changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESH_FAILED') {
-        setUser(null);
-      } else {
-        setUser(session?.user ?? null);
-      }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const fakeLogin = () => {
-    setUser(true);
-  };
-
   return (
     <AppContext.Provider
       value={{
-        user,
+        session,
+        isLoading,
         habits,
         fetchTotals,
         fetchHabits,
         dates,
         signInWithGitHub,
         signOut,
-        fakeLogin,
       }}
     >
       <div id="app-container" ref={appRef}>

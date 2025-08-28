@@ -1,21 +1,31 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import AppContext from 'src/contexts/AppContextProvider';
 
 function PrivateRoute() {
-  const { user } = useContext(AppContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading } = useContext(AppContext);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    if (user !== undefined) {
-      setIsLoading(false);
-    }
-  }, [user]);
+    const timer = setTimeout(() => {
+      setMessage(
+        <h3>
+          If this takes a while click <Link to={'/login'}>here</Link>
+        </h3>
+      );
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <h1>Loading...</h1>
+        {message}
+      </div>
+    );
   }
-  return user ? <Outlet /> : <Navigate to={'/login'} replace />;
+  return <Outlet />;
 }
 
 export default PrivateRoute;

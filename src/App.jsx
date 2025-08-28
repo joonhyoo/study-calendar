@@ -5,8 +5,12 @@ import Habit from 'src/pages/Habit';
 import PrivateRoute from './utils/PrivateRoute';
 import Login from './pages/Login';
 import 'src/styles/App.css';
+// import { useContext, useEffect } from 'react';
+// import AppContext from './contexts/AppContextProvider';
 
 function App() {
+  // const { session } = useContext(AppContext);
+  // useEffect(() => {}, [session]);
   return (
     <Routes>
       <Route path="/login" element={<Login />} />

@@ -10,6 +10,10 @@ export default function Home() {
 
   const navigate = useNavigate();
 
+  const handleSignOut = () => {
+    signOut().then(() => navigate('/login'));
+  };
+
   useEffect(() => {
     fetchHabits();
   }, [fetchHabits]);
@@ -18,7 +22,7 @@ export default function Home() {
     <>
       <h1>Habit Tracker</h1>
       <button onClick={() => navigate('/profile')}>Go to Profile</button>
-      <button onClick={signOut}>Sign Out</button>
+      <button onClick={handleSignOut}>Sign Out</button>
       <div id="habits-container">
         {habits &&
           habits.map((habit, index) => (

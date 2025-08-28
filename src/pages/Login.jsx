@@ -4,14 +4,14 @@ import AppContext from 'src/contexts/AppContextProvider';
 import 'src/styles/Login.css';
 
 export default function Login() {
-  const { user, signInWithGitHub, fakeLogin } = useContext(AppContext);
+  const { signInWithGitHub, session } = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (session) {
       navigate('/home');
     }
-  }, [navigate, user]);
+  }, [navigate, session]);
 
   return (
     <div id="login-popup">
@@ -25,7 +25,6 @@ export default function Login() {
           src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
         />
       </button>
-      <button onClick={fakeLogin}>Fake Login</button>
     </div>
   );
 }
