@@ -4,14 +4,14 @@ import AppContext from 'src/contexts/AppContextProvider';
 import 'src/styles/Login.css';
 
 export default function Login() {
-  const { signInWithGitHub, session } = useContext(AppContext);
+  const { signInWithGitHub, claims } = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) {
+    if (claims) {
       navigate('/home');
     }
-  }, [navigate, session]);
+  }, [navigate, claims]);
 
   return (
     <div id="login-popup">

@@ -1,11 +1,12 @@
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { redirect } from 'react-router-dom';
 import { customDateFormat } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
 
 const AppContext = createContext({});
 
 const AppContextProvider = ({ children }) => {
-  const [session, setSession] = useState(null);
+  const [claims, setClaims] = useState(null);
   const [habits, setHabits] = useState([]);
   const [dates, setDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -97,31 +98,48 @@ const AppContextProvider = ({ children }) => {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    setClaims(null);
+    if (error) {
+      console.warn('Sign out error:', error.message);
+    }
   };
 
   useEffect(() => {
-    session ? setIsLoading(false) : setIsLoading(true);
-  }, [session]);
+    claims ? setIsLoading(false) : setIsLoading(true);
+  }, [claims]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
+    const verifyUser = async () => {
+      const { data, error } = await supabase.auth.getClaims();
+      if (error || !data?.claims) {
+        console.warn('Error verifying user:', error?.message);
+        redirect('/login');
+      } else {
+        setClaims(data.claims);
+      }
+    };
+    verifyUser();
+    // for now i won't use this because i don't think many state changes
+    // can happen given the app at the moment
+    // const {
+    //   data: { subscription },
+    // } = supabase.auth.onAuthStateChange((event, session) => {
+    //   if (event === 'SIGNED_OUT') {
+    //     setSession(null);
+    //   } else if (session) {
+    //     setSession(session);
+    //   }
+    // });
+    // return () => {
+    //   subscription.unsubscribe();
+    // };
   }, []);
 
   return (
     <AppContext.Provider
       value={{
-        session,
+        claims,
         isLoading,
         habits,
         fetchTotals,

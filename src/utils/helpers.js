@@ -13,15 +13,6 @@ export const customDateFormat = (inputDate) => {
   return currYear + "-" + currMonth + "-" + currDate;
 };
 
-// export const spliceRecordsObj = (inputRecordsObj, endDate) => {
-//   Object.keys(inputRecordsObj).forEach((recordKey) => {
-//     if (new Date(recordKey) < endDate) {
-//       delete inputRecordsObj[recordKey];
-//     }
-//   });
-//   return inputRecordsObj;
-// };
-
 export const findMaxObj = (itemsObj) => {
   return Math.max(...Object.values(itemsObj));
 };

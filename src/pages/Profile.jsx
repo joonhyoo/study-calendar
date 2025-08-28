@@ -5,7 +5,7 @@ import AppContext from 'src/contexts/AppContextProvider';
 
 export default function Profile() {
   const navigate = useNavigate();
-  const { session } = useContext(AppContext);
+  const { claims } = useContext(AppContext);
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -15,8 +15,7 @@ export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
-      <p>User ID: {session.user.id}</p>
-      <p>Email: {session.user.email}</p>
+      <p>Email: {claims && claims.email}</p>
       <button onClick={() => navigate('/')}>Go back home</button>
       <button onClick={signOut}>Sign Out</button>
     </div>
