@@ -1,22 +1,11 @@
 #login-popup {
-  position: absolute;
-  top: calc(50% - 150px);
+  margin: auto;
   display: flex;
   flex-direction: column;
   text-align: center;
-  background-color: #c2d9ff;
+  background-color: #5596ff;
   gap: 32px;
-  width: 250px;
-  border: 2px solid black;
   padding: 32px 48px;
-}
-
-.mini-logo {
-  font-size: 2rem;
-}
-
-#sign-in-text {
-  font-size: 1rem;
 }
 
 #login-button {
@@ -28,15 +17,9 @@
   gap: 24px;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
-}
-
-#login-button:hover {
-  cursor: pointer;
-  background-color: rgb(234, 234, 234);
 }
 
 #github-logo-img {
-  max-height: 1rem;
-  max-width: 1rem;
+  max-height: 16px;
+  max-width: 16px;
 }

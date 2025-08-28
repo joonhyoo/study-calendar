@@ -15,10 +15,16 @@ export default function Login() {
 
   return (
     <div id="login-popup">
-      <h1 className="mini-logo">:&#62;</h1>
-      <p id="sign-in-text">sign in to continue</p>
-      <button id="login-button" onClick={signInWithGitHub}>
-        Sign In with GitHub
+      <div>
+        <h1>Habit Tracker</h1>
+        <p>sign in to continue</p>
+      </div>
+      <button
+        id="login-button"
+        className="clickable"
+        onClick={signInWithGitHub}
+      >
+        Sign in with GitHub
         <img
           id="github-logo-img"
           alt="GitHub logo"

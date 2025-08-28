@@ -13,7 +13,8 @@ body {
 }
 
 html {
-  display: flex;
+  min-height: 100%;
+  box-sizing: border-box;
   flex-direction: column;
   align-items: center;
   background-color: black;
@@ -21,9 +22,9 @@ html {
 }
 
 body {
+  margin: auto;
   font-family: "Geologica";
   max-width: 366px;
-  width: 100%;
 }
 
 .unstyled-link {
