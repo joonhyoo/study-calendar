@@ -10,7 +10,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
       <Route element={<PrivateRoute />}>
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
