@@ -1,14 +1,18 @@
-import supabase from 'src/utils/supabase';
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import HabitTracker from 'src/components/HabitTracker/HabitTracker';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 import 'src/styles/Home.css';
 
 export default function Home() {
-  const { habits, signOut } = useContext(AppContext);
+  const { habits, signOut, fetchHabits } = useContext(AppContext);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchHabits();
+  }, [fetchHabits]);
 
   return (
     <>

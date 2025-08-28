@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { customDateFormat } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
 
@@ -11,7 +11,7 @@ const AppContextProvider = ({ children }) => {
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
 
-  const fetchHabits = () => {
+  const fetchHabits = useCallback(() => {
     supabase
       .from('habit')
       .select(
@@ -22,7 +22,7 @@ const AppContextProvider = ({ children }) => {
         `
       )
       .then((res) => setHabits(res.data));
-  };
+  }, []);
 
   const fetchTotals = (habit_id) => {
     return supabase
@@ -81,7 +81,6 @@ const AppContextProvider = ({ children }) => {
       setDates(tempDates);
     };
     createDates();
-    fetchHabits();
   }, [availCols]);
 
   const signInWithGitHub = async () => {
@@ -101,8 +100,9 @@ const AppContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
+    // Use getSession to ensure OAuth redirect is handled
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
     });
 
     const {
@@ -124,6 +124,7 @@ const AppContextProvider = ({ children }) => {
         user,
         habits,
         fetchTotals,
+        fetchHabits,
         dates,
         signInWithGitHub,
         signOut,
