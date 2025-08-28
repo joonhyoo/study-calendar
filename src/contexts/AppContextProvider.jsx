@@ -87,8 +87,10 @@ const AppContextProvider = ({ children }) => {
   const signInWithGitHub = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
+      options: {
+        redirectTo: window.location.origin, // Ensures session is set on the correct domain
+      },
     });
-
     if (error) {
       console.error('GitHub login failed:', error.message);
     }
