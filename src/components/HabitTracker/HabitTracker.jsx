@@ -15,28 +15,29 @@ import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 */
 
 export default function HabitTracker() {
+  const { habits, fetchTotals, dates, ref } = useContext(AppContext);
   const { habit } = useContext(HabitContext);
-  const { fetchTotals, dates, ref } = useContext(AppContext);
   const [totals, setTotals] = useState({});
   const [max, setMax] = useState(0);
 
+  // gets totals for current habit
   useEffect(() => {
-    if (!habit.id) return;
+    if (!habit) return;
     fetchTotals(habit.id).then((res) => {
       Object.keys(res).filter((x) => dates.includes(x));
       setTotals(res);
       setMax(findMaxObj(res));
     });
-  }, [habit.id, fetchTotals, dates]);
+  }, [fetchTotals, dates, habits, habit]);
+
   return (
     <div className="tracking-container unselectable" ref={ref}>
-      <div className="tracker-title-container">
-        <h2>{habit.title}</h2>
-        <DateBox
-          ratio={totals[getLocalToday()] / max}
-          rgbColor={habit.rgbColor}
-        />
-      </div>
+      {habit && (
+        <div className="tracker-title-container">
+          <h2>{habit.title}</h2>
+          <DateBox ratio={totals[getLocalToday()] / max} />
+        </div>
+      )}
       <div className="tracking-calendar">
         {dates.map((x, i) => (
           <DateBox key={i} ratio={totals[x] / max || 0} />
