@@ -4,15 +4,37 @@ import HabitTracker from 'src/components/HabitTracker/HabitTracker';
 import HabitUpdater from 'src/components/HabitUpdater/HabitUpdater';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
+import { getLocalToday } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
 
 function Habit() {
   const [curr, setCurr] = useState(null);
   const { habits } = useContext(AppContext);
+  const [changes, setChanges] = useState({});
+  const [old, setOld] = useState({});
   const [materials, setMaterials] = useState([]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const habitId = Number(searchParams.get('habit_id'));
+
+  const handleOnRecordChange = (materialId, changedRecord) => {
+    const tempChanges = { ...changes };
+    tempChanges[materialId] = changedRecord;
+    setChanges(tempChanges);
+  };
+
+  const handleSave = () => {
+    materials.forEach((material) => {
+      if (material.id in changes) {
+        updateCount(material.id, changes[material.id]);
+      }
+    });
+    setOld(changes);
+  };
+
+  const handleCancel = () => {
+    setChanges(old);
+  };
 
   useEffect(() => {
     if (habits) {
@@ -22,13 +44,56 @@ function Habit() {
   }, [habits, habitId]);
 
   // fetches materials by habit id
-  const fetchMaterials = (habitId) => {
-    supabase
+  const fetchMaterials = async (habitId) => {
+    const res = await supabase
       .from('habit_material')
       .select('*')
-      .eq('habit_id', habitId)
-      .then((res) => setMaterials(res.data));
+      .eq('habit_id', habitId);
+    if (res) setMaterials(res.data);
   };
+
+  // updates count by material id
+  const updateCount = (materialId, newCount) => {
+    supabase
+      .from('habit_records')
+      .upsert({
+        material_id: materialId,
+        created_on: getLocalToday(),
+        count: newCount,
+      })
+      .then((res) => {
+        if (res.error) console.error(res.error);
+      });
+  };
+
+  useEffect(() => {
+    // fetches counts of all material ids and updates old
+    const fetchAllCounts = async () => {
+      const materialIds = materials.map((m) => m.id);
+      const { data, error } = await supabase
+        .from('habit_records')
+        .select('material_id, count')
+        .in('material_id', materialIds)
+        .eq('created_on', getLocalToday());
+
+      if (error) {
+        console.error(error.message);
+        setOld({});
+        return;
+      }
+
+      // Map results to { [materialId]: { count } }
+      const counts = {};
+      materialIds.forEach((id) => {
+        const found = data.find((d) => d.material_id === id);
+        counts[id] = found ? found.count : 0;
+      });
+      setOld(counts);
+      setChanges(counts);
+    };
+
+    fetchAllCounts();
+  }, [materials]);
 
   return (
     <div>
@@ -37,10 +102,17 @@ function Habit() {
       </a>
       {curr && (
         <div>
+          <button onClick={handleSave}>save</button>
+          <button onClick={handleCancel}>cancel</button>
           <HabitContextProvider habit={curr}>
             <HabitTracker />
             {materials.map((material, index) => (
-              <HabitUpdater key={index} material={material} />
+              <HabitUpdater
+                key={index}
+                count={changes && changes[material.id]}
+                material={material}
+                onRecordChange={handleOnRecordChange}
+              />
             ))}
           </HabitContextProvider>
         </div>
