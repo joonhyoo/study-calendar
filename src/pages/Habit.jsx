@@ -18,28 +18,6 @@ function Habit() {
     }
   }, [habits, habitId]);
 
-  // useEffect(() => {
-  //   const materialIds = new Set();
-  //   const habitByMaterial = [];
-  //   if (curr) {
-  //     curr.records
-  //       .flatMap((record) => record.items)
-  //       .forEach((x) => materialIds.add(x.material_id));
-  //     materialIds.forEach((material_id) => {
-  //       const temp = curr.records.map((record) => {
-  //         return {
-  //           created_on: record.created_on,
-  //           records: record.items.filter(
-  //             (item) => item.material_id === material_id
-  //           ),
-  //         };
-  //       });
-  //       habitByMaterial.push({ material_id: material_id, temp });
-  //     });
-  //     setMaterials(habitByMaterial);
-  //   }
-  // }, [curr]);
-
   return (
     <div>
       <a onClick={() => navigate('/home')} className="clickable unstyled-link">

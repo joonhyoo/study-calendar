@@ -13,6 +13,7 @@ const AppContextProvider = ({ children }) => {
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
 
+  // fetches user habits
   const fetchHabits = useCallback(() => {
     supabase
       .from('habit')
@@ -26,6 +27,7 @@ const AppContextProvider = ({ children }) => {
       .then((res) => setHabits(res.data));
   }, []);
 
+  // fetches array of total count of completed tasks for a habit id
   const fetchTotals = (habit_id) => {
     return supabase
       .from('habit')
@@ -54,6 +56,7 @@ const AppContextProvider = ({ children }) => {
       });
   };
 
+  // on resize, updates avail cols for tracker calendars
   useEffect(() => {
     const handleResize = () => {
       if (!appRef.current) return;
@@ -71,6 +74,7 @@ const AppContextProvider = ({ children }) => {
     return () => resizeObserver.disconnect();
   }, []);
 
+  // generates necessary array of dates in accordance with avail Cols
   useEffect(() => {
     const createDates = () => {
       const tempDates = [];
@@ -85,6 +89,7 @@ const AppContextProvider = ({ children }) => {
     createDates();
   }, [availCols]);
 
+  // signs in with Github Oauth, but may implement more in future
   const signInWithGitHub = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
@@ -105,10 +110,16 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+  // loading for middleware to determine user authorization
   useEffect(() => {
     claims ? setIsLoading(false) : setIsLoading(true);
   }, [claims]);
 
+  useEffect(() => {
+    fetchHabits();
+  }, [fetchHabits]);
+
+  // authorizes user through supabase auth
   useEffect(() => {
     const verifyUser = async () => {
       const { data, error } = await supabase.auth.getClaims();
@@ -120,20 +131,6 @@ const AppContextProvider = ({ children }) => {
       }
     };
     verifyUser();
-    // for now i won't use this because i don't think many state changes
-    // can happen given the app at the moment
-    // const {
-    //   data: { subscription },
-    // } = supabase.auth.onAuthStateChange((event, session) => {
-    //   if (event === 'SIGNED_OUT') {
-    //     setSession(null);
-    //   } else if (session) {
-    //     setSession(session);
-    //   }
-    // });
-    // return () => {
-    //   subscription.unsubscribe();
-    // };
   }, []);
 
   return (
