@@ -1,0 +1,6 @@
+.tracking-calendar {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, auto);
+  gap: 4px;
+}
