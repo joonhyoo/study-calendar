@@ -11,6 +11,7 @@ function Habit() {
   const [curr, setCurr] = useState(null);
   const { habits } = useContext(AppContext);
   const [changes, setChanges] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
   const [old, setOld] = useState({});
   const [materials, setMaterials] = useState([]);
   const navigate = useNavigate();
@@ -30,10 +31,12 @@ function Habit() {
       }
     });
     setOld(changes);
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
     setChanges(old);
+    setIsEditing(false);
   };
 
   useEffect(() => {
@@ -102,8 +105,16 @@ function Habit() {
       </a>
       {curr && (
         <div>
-          <button onClick={handleSave}>save</button>
-          <button onClick={handleCancel}>cancel</button>
+          <div>
+            {isEditing ? (
+              <div>
+                <button onClick={handleSave}>save</button>
+                <button onClick={handleCancel}>cancel</button>
+              </div>
+            ) : (
+              <button onClick={() => setIsEditing(true)}>edit</button>
+            )}
+          </div>
           <HabitContextProvider habit={curr}>
             <HabitTracker />
             {materials.map((material, index) => (
@@ -112,6 +123,7 @@ function Habit() {
                 count={changes && changes[material.id]}
                 material={material}
                 onRecordChange={handleOnRecordChange}
+                isEditing={isEditing}
               />
             ))}
           </HabitContextProvider>

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import './HabitUpdater.css';
 import HabitContext from 'src/contexts/HabitContextProvider';
 
-function HabitUpdater({ material, onRecordChange, count }) {
+function HabitUpdater({ material, onRecordChange, count, isEditing }) {
   const { habit } = useContext(HabitContext);
 
   const handlePlus = () => {
@@ -20,13 +20,17 @@ function HabitUpdater({ material, onRecordChange, count }) {
       <div className="tracking-container unselectable">
         <p>{material.title}</p>
         <div style={{ display: 'flex' }}>
-          <button className="styled-button clickable" onClick={handleMinus}>
-            minus
-          </button>
+          {isEditing && (
+            <button className="styled-button clickable" onClick={handleMinus}>
+              minus
+            </button>
+          )}
           <p>count: {count && count}</p>
-          <button className="styled-button clickable" onClick={handlePlus}>
-            plus
-          </button>
+          {isEditing && (
+            <button className="styled-button clickable" onClick={handlePlus}>
+              plus
+            </button>
+          )}
         </div>
       </div>
     )
