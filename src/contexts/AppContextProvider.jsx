@@ -27,7 +27,7 @@ const AppContextProvider = ({ children }) => {
       .then((res) => setHabits(res.data));
   }, []);
 
-  // fetches array of total count of completed tasks for a habit id
+  // fetches object of materialId : total for all materials under habit_id
   const fetchTotals = (habit_id) => {
     return supabase
       .from('habit')
@@ -54,6 +54,18 @@ const AppContextProvider = ({ children }) => {
           });
         return recordsObj;
       });
+  };
+
+  // fetches object of materialId : count
+  const fetchMaterialTotals = async (materialId) => {
+    const { data, error } = await supabase
+      .from('habit_records')
+      .select('*')
+      .eq('material_id', materialId);
+    if (error) console.error(error);
+    const totalsObj = {};
+    data.forEach((record) => (totalsObj[record.created_on] = record.count));
+    return totalsObj;
   };
 
   // on resize, updates avail cols for tracker calendars
@@ -141,6 +153,7 @@ const AppContextProvider = ({ children }) => {
         habits,
         fetchTotals,
         fetchHabits,
+        fetchMaterialTotals,
         dates,
         signInWithGitHub,
         signOut,
