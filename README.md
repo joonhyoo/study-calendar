@@ -1,11 +1,12 @@
 # study-calendar
 
-updated study calendar
+habit tracking web application
 
-This application aims to display my contributions to my studying for japanese!
+This application was originally designed to track my daily Japanese studies. After working on it for a while, the application is being generalised to a visual habit tracking application.
 
-The table will look similar to the GitHub contributions table.
+Visually, I was inspired by  GitHub's contribution table for repositories.
 
 ##🚀 Currently Working On
-- Auth with GitHub
-- Project Init
+- debugging reactivity within elements
+- styling recently habit page, and recently added features
+- adding a page to add/update habits and respective materials
