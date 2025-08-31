@@ -15,7 +15,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div>
       <h1>Habit Tracker</h1>
       <button onClick={() => navigate('/profile')}>Go to Profile</button>
       <button onClick={handleSignOut}>Sign Out</button>
@@ -33,6 +33,6 @@ export default function Home() {
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 }

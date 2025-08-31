@@ -6,6 +6,7 @@ import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 import { getLocalToday } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
+import 'src/styles/Habit.css';
 
 function Habit() {
   const [curr, setCurr] = useState(null);
@@ -101,22 +102,54 @@ function Habit() {
   return (
     <div>
       <a onClick={() => navigate('/home')} className="clickable unstyled-link">
-        <h1>◂ home</h1>
+        <h1 style={{ paddingBottom: '48px' }}>◂ home</h1>
       </a>
       {curr && (
-        <div>
-          <div>
-            {isEditing ? (
-              <div>
-                <button onClick={handleSave}>save</button>
-                <button onClick={handleCancel}>cancel</button>
-              </div>
-            ) : (
-              <button onClick={() => setIsEditing(true)}>edit</button>
-            )}
-          </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}
+        >
           <HabitContextProvider habit={curr}>
             <HabitTracker />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}
+            >
+              {isEditing ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '8px',
+                  }}
+                >
+                  <button
+                    onClick={handleSave}
+                    className="styled-button clickable"
+                  >
+                    save
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="styled-button clickable"
+                  >
+                    cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="styled-button clickable"
+                >
+                  edit
+                </button>
+              )}
+            </div>
+
             {materials.map((material, index) => (
               <HabitUpdater
                 key={index}
