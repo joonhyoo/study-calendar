@@ -2,3 +2,17 @@
   background-color: black;
   border: none;
 }
+
+.modifier-button {
+  background-color: rgba(0, 0, 0, 0);
+  flex: 1;
+  border: none;
+}
+
+.updater-container {
+  background-color: #323334;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}

@@ -34,21 +34,47 @@ function HabitUpdater({ material, onRecordChange, count, isEditing }) {
 
   return (
     habit && (
-      <div className="tracking-container unselectable">
-        <p>{material.title}</p>
+      <div className="updater-container unselectable">
+        <h4 style={{ fontSize: '20px', fontWeight: 700 }}>{material.title}</h4>
         <TrackingCalendar totals={materialTotals} max={max} short />
-        <div style={{ display: 'flex' }}>
-          {isEditing && (
-            <button className="styled-button clickable" onClick={handleMinus}>
-              minus
-            </button>
-          )}
-          <p>count: {count && count}</p>
-          {isEditing && (
-            <button className="styled-button clickable" onClick={handlePlus}>
-              plus
-            </button>
-          )}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <p>Completed:</p>
+          <div
+            style={{
+              display: 'flex',
+              gap: '4px',
+              padding: '4px',
+              width: '86px',
+              justifyContent: 'center',
+              backgroundColor: isEditing && 'rgba(255, 255, 255, 0.05)',
+            }}
+          >
+            {isEditing && (
+              <button
+                className="modifier-button clickable"
+                onClick={handleMinus}
+              >
+                &minus;
+              </button>
+            )}
+            <p style={{ width: '30px', textAlign: 'center' }}>
+              {count && count}
+            </p>
+            {isEditing && (
+              <button
+                className="modifier-button clickable"
+                onClick={handlePlus}
+              >
+                &#43;
+              </button>
+            )}
+          </div>
         </div>
       </div>
     )
