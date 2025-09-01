@@ -102,7 +102,7 @@ function Habit() {
   return (
     <div>
       <a onClick={() => navigate('/home')} className="clickable unstyled-link">
-        <h1 style={{ paddingBottom: '48px' }}>◂ home</h1>
+        <h1 style={{ marginBottom: '48px' }}>◂ home</h1>
       </a>
       {curr && (
         <div
