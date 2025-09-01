@@ -4,8 +4,8 @@ import HabitContext from 'src/contexts/HabitContextProvider';
 
 function DateBox({ ratio }) {
   const { habit } = useContext(HabitContext);
-
   const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
+
   useEffect(() => {
     if (ratio === 0) {
       setBgColor('#C4C4C4');

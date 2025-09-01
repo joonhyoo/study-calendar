@@ -3,40 +3,45 @@ import './HabitUpdater.css';
 import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from '../TrackingCalendar/TrackingCalendar';
 import AppContext from 'src/contexts/AppContextProvider';
-import { findMaxObj } from 'src/utils/helpers';
+import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 
-function HabitUpdater({ material, onRecordChange, count, isEditing }) {
+function HabitUpdater({
+  material,
+  isEditing,
+  updateChanges,
+  todayCount,
+  records,
+}) {
+  const { dates } = useContext(AppContext);
   const { habit } = useContext(HabitContext);
-  const [materialTotals, setMaterialTotals] = useState({});
+  const [localTotals, setLocalTotals] = useState({});
   const [max, setMax] = useState(0);
-  const { fetchMaterialTotals, dates } = useContext(AppContext);
 
+  // when page resize, or records change
+  // update localTotals and max
   useEffect(() => {
-    if (!material) return;
     const shortDates = dates.slice(-dates.length / 7);
-    fetchMaterialTotals(material.id).then((totals) => {
-      const shortTotals = {};
-      shortDates.forEach((date) => (shortTotals[date] = totals[date] || 0));
-      setMaterialTotals(shortTotals);
-      setMax(findMaxObj(shortTotals));
-    });
-  }, [dates, fetchMaterialTotals, material]);
+    const shortTotals = shortDates.reduce((res, date) => {
+      res[date] = date === getLocalToday() ? todayCount : records?.[date] || 0;
+      return res;
+    }, {});
+    setLocalTotals(shortTotals);
+    setMax(findMaxObj(shortTotals));
+  }, [dates, records, todayCount]);
 
   const handlePlus = () => {
-    const newRec = count + 1;
-    onRecordChange(material.id, newRec);
+    updateChanges(material.id, todayCount + 1);
   };
 
   const handleMinus = () => {
-    const newRec = count > 0 ? count - 1 : 0;
-    onRecordChange(material.id, newRec);
+    updateChanges(material.id, todayCount > 0 ? todayCount - 1 : 0);
   };
 
   return (
     habit && (
       <div className="updater-container unselectable">
         <h4 style={{ fontSize: '20px', fontWeight: 700 }}>{material.title}</h4>
-        <TrackingCalendar totals={materialTotals} max={max} short />
+        <TrackingCalendar totals={localTotals} max={max} short />
         <div
           style={{
             display: 'flex',
@@ -64,7 +69,7 @@ function HabitUpdater({ material, onRecordChange, count, isEditing }) {
               </button>
             )}
             <p style={{ width: '30px', textAlign: 'center' }}>
-              {count && count}
+              {todayCount && todayCount}
             </p>
             {isEditing && (
               <button

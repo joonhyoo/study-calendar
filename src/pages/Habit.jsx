@@ -11,33 +11,54 @@ import 'src/styles/Habit.css';
 function Habit() {
   const [curr, setCurr] = useState(null);
   const { habits } = useContext(AppContext);
-  const [changes, setChanges] = useState({});
+  const [records, setRecords] = useState({}); // fixed item => won't change unless saving/upserting new data
+  const [todayCounts, setTodaysCounts] = useState({}); // stores all temporary changes that are to be staged
   const [isEditing, setIsEditing] = useState(false);
-  const [old, setOld] = useState({});
   const [materials, setMaterials] = useState([]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const habitId = Number(searchParams.get('habit_id'));
 
-  const handleOnRecordChange = (materialId, changedRecord) => {
-    const tempChanges = { ...changes };
-    tempChanges[materialId] = changedRecord;
-    setChanges(tempChanges);
-  };
-
+  // stages changes for each material id
   const handleSave = () => {
-    materials.forEach((material) => {
-      if (material.id in changes) {
-        updateCount(material.id, changes[material.id]);
-      }
+    // for todayCounts => upsert each
+    Object.keys(todayCounts).forEach((materialId) => {
+      updateCount(materialId, todayCounts[materialId]);
     });
-    setOld(changes);
     setIsEditing(false);
   };
 
+  // updates count by material id
+  const updateCount = async (materialId, newCount) => {
+    const { error } = await supabase.from('habit_records').upsert({
+      material_id: materialId,
+      created_on: getLocalToday(),
+      count: newCount,
+    });
+    if (error) console.error(error.message);
+  };
+
+  // returns changes back to fetched data
   const handleCancel = () => {
-    setChanges(old);
+    resetTodayCounts();
     setIsEditing(false);
+  };
+
+  // resets todayCounts to data on fetched records
+  const resetTodayCounts = () => {
+    const tempCounts = {};
+    materials.forEach((material) => {
+      const id = material.id;
+      tempCounts[id] = records[id]?.[getLocalToday()] ?? 0;
+    });
+    setTodaysCounts(tempCounts);
+  };
+
+  const updateChanges = (materialId, newTodayCount) => {
+    // updates changes object
+    const temp = { ...todayCounts };
+    temp[materialId] = newTodayCount;
+    setTodaysCounts(temp);
   };
 
   useEffect(() => {
@@ -56,47 +77,30 @@ function Habit() {
     if (res) setMaterials(res.data);
   };
 
-  // updates count by material id
-  const updateCount = (materialId, newCount) => {
-    supabase
-      .from('habit_records')
-      .upsert({
-        material_id: materialId,
-        created_on: getLocalToday(),
-        count: newCount,
-      })
-      .then((res) => {
-        if (res.error) console.error(res.error);
-      });
-  };
-
   useEffect(() => {
-    // fetches counts of all material ids and updates old
-    const fetchAllCounts = async () => {
+    // fetches records of all material ids
+    const fetchAllRecords = async () => {
       const materialIds = materials.map((m) => m.id);
       const { data, error } = await supabase
         .from('habit_records')
-        .select('material_id, count')
-        .in('material_id', materialIds)
-        .eq('created_on', getLocalToday());
-
+        .select('created_on, material_id, count')
+        .in('material_id', materialIds);
       if (error) {
-        console.error(error.message);
-        setOld({});
+        console.error(error?.message);
         return;
       }
-
-      // Map results to { [materialId]: { count } }
-      const counts = {};
-      materialIds.forEach((id) => {
-        const found = data.find((d) => d.material_id === id);
-        counts[id] = found ? found.count : 0;
+      const records = {};
+      materialIds.forEach((id) => (records[id] = {}));
+      const todayCounts = {};
+      data.forEach((record) => {
+        records[record.material_id][record.created_on] = record.count;
+        if (record.created_on === getLocalToday())
+          todayCounts[record.material_id] = record.count;
       });
-      setOld(counts);
-      setChanges(counts);
+      setTodaysCounts(todayCounts);
+      setRecords(records);
     };
-
-    fetchAllCounts();
+    fetchAllRecords();
   }, [materials]);
 
   return (
@@ -153,9 +157,10 @@ function Habit() {
             {materials.map((material, index) => (
               <HabitUpdater
                 key={index}
-                count={changes && changes[material.id]}
+                records={records[material.id]}
                 material={material}
-                onRecordChange={handleOnRecordChange}
+                todayCount={todayCounts[material.id]}
+                updateChanges={updateChanges}
                 isEditing={isEditing}
               />
             ))}
