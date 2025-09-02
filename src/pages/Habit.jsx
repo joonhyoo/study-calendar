@@ -91,6 +91,13 @@ function Habit() {
       }
       const records = {};
       materialIds.forEach((id) => (records[id] = {}));
+      // sets records
+      data.forEach((record) => {
+        records[record.material_id][record.created_on] = record.count;
+      });
+      setRecords(records);
+
+      // sets todayCount
       const todayCounts = {};
       Object.keys(records).forEach((id) => {
         const todayCount = data.find(
@@ -100,9 +107,7 @@ function Habit() {
         );
         todayCounts[id] = todayCount?.count ?? 0;
       });
-
       setTodaysCounts(todayCounts);
-      setRecords(records);
     };
     fetchAllRecords();
   }, [materials]);
