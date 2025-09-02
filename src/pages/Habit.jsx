@@ -92,11 +92,15 @@ function Habit() {
       const records = {};
       materialIds.forEach((id) => (records[id] = {}));
       const todayCounts = {};
-      data.forEach((record) => {
-        records[record.material_id][record.created_on] = record.count;
-        if (record.created_on === getLocalToday())
-          todayCounts[record.material_id] = record.count;
+      Object.keys(records).forEach((id) => {
+        const todayCount = data.find(
+          (record) =>
+            record.material_id === Number(id) &&
+            record.created_on === getLocalToday()
+        );
+        todayCounts[id] = todayCount?.count ?? 0;
       });
+
       setTodaysCounts(todayCounts);
       setRecords(records);
     };
