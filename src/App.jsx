@@ -6,6 +6,7 @@ import PrivateRoute from './utils/PrivateRoute';
 import Login from './pages/Login';
 import 'src/styles/App.css';
 import { HabitContextProvider } from './contexts/HabitContextProvider';
+import HabitSettings from './pages/HabitSettings';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/habit" element={<Habit />} />
+        <Route path="/settings" element={<HabitSettings />} />
       </Route>
     </Routes>
   );

@@ -17,8 +17,21 @@ export default function Home() {
   return (
     <div>
       <h1 style={{ marginBottom: '48px' }}>Habit Tracker</h1>
-      <button onClick={() => navigate('/profile')}>Go to Profile</button>
-      <button onClick={handleSignOut}>Sign Out</button>
+      <button
+        onClick={() => navigate('/profile')}
+        style={{ backgroundColor: 'black' }}
+      >
+        Go to Profile
+      </button>
+      <button onClick={handleSignOut} style={{ backgroundColor: 'black' }}>
+        Sign Out
+      </button>
+      <button
+        onClick={() => navigate('/settings')}
+        style={{ backgroundColor: 'black' }}
+      >
+        Settings
+      </button>
       <div id="habits-container">
         {habits &&
           habits.map((habit, index) => (

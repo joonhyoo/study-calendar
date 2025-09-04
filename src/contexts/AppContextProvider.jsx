@@ -152,7 +152,6 @@ const AppContextProvider = ({ children }) => {
         isLoading,
         habits,
         fetchTotals,
-        fetchHabits,
         fetchMaterialTotals,
         dates,
         signInWithGitHub,
