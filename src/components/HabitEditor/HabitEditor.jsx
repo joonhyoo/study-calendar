@@ -3,9 +3,21 @@ import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
 import './Editor.css';
 
-const HabitEditor = ({ habit }) => {
+const HabitEditor = ({ habit, handleArchiveHabit }) => {
   const [materials, setMaterials] = useState([]); // immutable, won't change.
-  const [tempMaterials, setTempMaterials] = useState([]); // this one changes
+  const [title, setTitle] = useState(habit.title); // this one changes
+
+  // useEffect autosaves Habit Title only
+  useEffect(() => {
+    if (title === habit.title) return;
+    const handler = setTimeout(() => {
+      console.log('Autosaving:', title);
+    }, 1000);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [habit.title, title]);
 
   // fetches materials by habit id
   const fetchMaterials = async (habitId) => {
@@ -18,27 +30,28 @@ const HabitEditor = ({ habit }) => {
       console.error(error.message);
     } else {
       setMaterials(data);
-      setTempMaterials(data);
     }
   };
 
-  // const upsertMaterial = async (habitId, title, desc, materialId) => {
-  //   const { error } = await supabase.from('habit_material').upsert({
-  //     id: Number(materialId),
-  //     title: title,
-  //     description: desc,
-  //     habit_id: habitId,
-  //   });
-  //   if (error) console.error(error.message);
-  // };
+  const handleArchiveMaterial = (materialId) => {
+    const tempMaterials = [...materials];
+    const index = tempMaterials.findIndex(
+      (material) => material.id === materialId
+    );
+    if (index > -1) {
+      tempMaterials.splice(index, 1);
+    }
+    setMaterials(tempMaterials);
+    archiveMaterial(materialId);
+  };
 
-  // const archiveMaterial = async (materialId) => {
-  //   const { error } = await supabase
-  //     .from('habit_material')
-  //     .update({ visible: false })
-  //     .eq('id', materialId);
-  //   if (error) console.error(error.message);
-  // };
+  const archiveMaterial = async (materialId) => {
+    const { error } = await supabase
+      .from('habit_material')
+      .update({ visible: false })
+      .eq('id', materialId);
+    if (error) console.error(error.message);
+  };
 
   useEffect(() => {
     fetchMaterials(habit.id);
@@ -48,28 +61,41 @@ const HabitEditor = ({ habit }) => {
     return Math.random().toString().slice(2, 11);
   };
 
+  const upsertMaterial = async (habitId, material) => {
+    const { error } = await supabase.from('habit_material').upsert({
+      id: Number(material.id),
+      title: material.title,
+      description: material.description,
+      habit_id: habitId,
+    });
+    if (error) console.error(error.message);
+  };
+
   const handleAddMaterial = () => {
-    // new items probably need to be their own component to allow edit and delete
     const newItem = {
       title: 'Title',
       description: 'Description',
       id: generateUniqueID(),
     };
-    const temp = [...tempMaterials];
-    temp.push(newItem);
-    setTempMaterials(temp);
+    const tempMaterials = [...materials];
+    tempMaterials.push(newItem);
+    upsertMaterial(habit.id, newItem);
+    setMaterials(tempMaterials);
   };
 
   const handleSave = (newTitle, newDesc, materialId) => {
-    const temp = [...tempMaterials];
-    const index = temp.findIndex((material) => material.id === materialId);
-    const newItem = {
+    const tempMaterials = [...materials];
+    const index = tempMaterials.findIndex(
+      (material) => material.id === materialId
+    );
+    const savedItem = {
+      id: materialId,
       title: newTitle,
       description: newDesc,
     };
-    temp[index] = newItem;
-    // upsertMaterial(habit.id, newTitle, newDesc, materialId).then();
-    setTempMaterials(temp);
+    tempMaterials[index] = savedItem;
+    upsertMaterial(habit.id, savedItem);
+    setMaterials(tempMaterials);
   };
 
   return (
@@ -85,7 +111,10 @@ const HabitEditor = ({ habit }) => {
       <div style={{ display: 'flex' }}>
         <input
           type="text"
-          defaultValue={habit.title}
+          value={title}
+          onChange={(e) => {
+            if (e.target.value.length <= 20) setTitle(e.target.value);
+          }}
           style={{
             width: '100%',
             fontSize: '24px',
@@ -93,13 +122,19 @@ const HabitEditor = ({ habit }) => {
           }}
           className={`updatable-input`}
         />
-        <button className="clickable standard-button">archive</button>
+        <button
+          className="clickable standard-button"
+          onClick={() => handleArchiveHabit(habit.id)}
+        >
+          archive
+        </button>
       </div>
-      {tempMaterials.map((material, index) => (
+      {materials.map((material, index) => (
         <MaterialEditor
           material={material}
           key={index}
           handleSave={handleSave}
+          handleArchiveMaterial={handleArchiveMaterial}
         />
       ))}
       <div style={{ display: 'flex', justifyContent: 'center' }}>

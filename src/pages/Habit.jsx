@@ -163,16 +163,18 @@ function Habit() {
               )}
             </div>
 
-            {materials.map((material, index) => (
-              <HabitUpdater
-                key={index}
-                records={records[material.id]}
-                material={material}
-                todayCount={todayCounts[material.id]}
-                updateChanges={updateChanges}
-                isEditing={isEditing}
-              />
-            ))}
+            {materials
+              .filter((material) => material.visible)
+              .map((material, index) => (
+                <HabitUpdater
+                  key={index}
+                  records={records[material.id]}
+                  material={material}
+                  todayCount={todayCounts[material.id]}
+                  updateChanges={updateChanges}
+                  isEditing={isEditing}
+                />
+              ))}
           </HabitContextProvider>
         </div>
       )}

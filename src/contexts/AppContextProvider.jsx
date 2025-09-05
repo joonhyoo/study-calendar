@@ -21,7 +21,8 @@ const AppContextProvider = ({ children }) => {
         `
           title,
           id,
-          rgbColor
+          rgbColor,
+          visible
         `
       )
       .then((res) => setHabits(res.data));

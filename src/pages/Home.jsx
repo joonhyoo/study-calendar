@@ -34,17 +34,19 @@ export default function Home() {
       </button>
       <div id="habits-container">
         {habits &&
-          habits.map((habit, index) => (
-            <div
-              key={index}
-              className="clickable"
-              onClick={() => navigate('/habit?habit_id=' + habit.id)}
-            >
-              <HabitContextProvider habit={habit}>
-                <HabitTracker />
-              </HabitContextProvider>
-            </div>
-          ))}
+          habits
+            .filter((habit) => habit.visible)
+            .map((habit, index) => (
+              <div
+                key={index}
+                className="clickable"
+                onClick={() => navigate('/habit?habit_id=' + habit.id)}
+              >
+                <HabitContextProvider habit={habit}>
+                  <HabitTracker />
+                </HabitContextProvider>
+              </div>
+            ))}
       </div>
     </div>
   );

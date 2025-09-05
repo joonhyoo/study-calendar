@@ -12,27 +12,44 @@ function HabitSettings() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTempHabits(habits);
+    setTempHabits(habits.filter((habit) => habit.visible));
   }, [habits]);
 
   const generateUniqueID = () => {
     return Math.random().toString().slice(2, 11);
   };
 
-  // const insertHabit = async ({ title, id, rgbColor }) => {
-  //   console.log(title, rgbColor, id);
-  //   const { error } = await supabase
-  //     .from('habit')
-  //     .insert({ title: title, rgbColor: rgbColor, id: id });
-  //   if (error) console.error(error.message);
-  // };
+  const handleArchiveHabit = (habitId) => {
+    const temp = [...tempHabits];
+    const index = temp.findIndex((habit) => habit.id === habitId);
+    if (index > -1) {
+      temp.splice(index, 1);
+    }
+    setTempHabits(temp);
+    archiveHabit(habitId);
+  };
+
+  const archiveHabit = async (habitId) => {
+    const { error } = await supabase
+      .from('habit')
+      .update({ visible: false })
+      .eq('id', habitId);
+    if (error) console.error(error.message);
+  };
+
+  const insertHabit = async ({ title, id, rgbColor }) => {
+    const { error } = await supabase
+      .from('habit')
+      .insert({ title: title, rgbColor: rgbColor, id: id });
+    if (error) console.error(error.message);
+  };
 
   const handleAddHabit = () => {
     const id = generateUniqueID();
     const temp = [...tempHabits];
     const newHabit = { title: 'title', id: id, rgbColor: '0, 0, 0' };
     temp.push(newHabit);
-    // insertHabit(newHabit);
+    insertHabit(newHabit);
     setTempHabits(temp);
   };
 
@@ -49,7 +66,11 @@ function HabitSettings() {
       </a>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
         {tempHabits.map((habit, index) => (
-          <HabitEditor key={index} habit={habit} />
+          <HabitEditor
+            key={index}
+            habit={habit}
+            handleArchiveHabit={handleArchiveHabit}
+          />
         ))}
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>

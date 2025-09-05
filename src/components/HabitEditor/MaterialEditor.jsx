@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import './Editor.css';
 
-export const MaterialEditor = ({ material, handleSave }) => {
+export const MaterialEditor = ({
+  material,
+  handleSave,
+  handleArchiveMaterial,
+}) => {
   const [isExpand, setIsExpand] = useState(false);
   const [title, setTitle] = useState(material.title);
   const [description, setDescription] = useState(material.description);
@@ -28,7 +32,6 @@ export const MaterialEditor = ({ material, handleSave }) => {
           type="text"
           value={title}
           onChange={(e) => {
-            console.log(e.target.value);
             if (e.target.value.length <= 20) setTitle(e.target.value);
           }}
           style={{
@@ -38,7 +41,12 @@ export const MaterialEditor = ({ material, handleSave }) => {
           onClick={() => setIsExpand(true)}
         />
         {isExpand && (
-          <button className="clickable standard-button">archive</button>
+          <button
+            className="clickable standard-button"
+            onClick={() => handleArchiveMaterial(material.id)}
+          >
+            archive
+          </button>
         )}
       </div>
       {isExpand && (
