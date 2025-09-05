@@ -41,3 +41,22 @@ body {
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
+.large-text {
+  font-size: 1.5em;
+}
+
+.medium-text {
+  font-size: 1.25em;
+}
+
+.normal-text {
+  font-size: 1em;
+}
+
+.standard-button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  padding: 8px 16px;
+}

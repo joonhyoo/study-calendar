@@ -5,7 +5,6 @@ import Habit from 'src/pages/Habit';
 import PrivateRoute from './utils/PrivateRoute';
 import Login from './pages/Login';
 import 'src/styles/App.css';
-import { HabitContextProvider } from './contexts/HabitContextProvider';
 import HabitSettings from './pages/HabitSettings';
 
 function App() {
