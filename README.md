@@ -32,6 +32,7 @@ The tech used in this project is: `React` on the front-end and hosted on `Vercel
 
 ## 🧩 Future Improvements
 
+- <img src="https://www.svgrepo.com/show/354478/typescript-icon.svg" alt="habit-detail-view-page" width="16"> TypeScript Support
 - 💡 Smoother UX
 - 📈 Analytics and habit trends
 - 🎯 Habit goals and streak challenges
