@@ -3,23 +3,25 @@ import './HabitTracker.css';
 import AppContext from 'src/contexts/AppContextProvider';
 import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from '../TrackingCalendar/TrackingCalendar';
-import { findMaxObj } from 'src/utils/helpers';
+import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 
-export default function HabitTracker() {
-  const [totals, setTotals] = useState({});
+export default function HabitTracker({ todayTotal, records }) {
   const [max, setMax] = useState(0);
-  const { ref, dates, fetchTotals } = useContext(AppContext);
+  const { ref, dates } = useContext(AppContext);
   const { habit } = useContext(HabitContext);
 
+  const [localTotals, setLocalTotals] = useState({});
+
+  // when page resize, or records change
+  // update localTotals and max
   useEffect(() => {
-    if (!habit) return;
-    fetchTotals(habit.id).then((res) => {
-      const shortTotals = {};
-      dates.forEach((date) => (shortTotals[date] = res[date] || 0));
-      setTotals(shortTotals);
-      setMax(findMaxObj(shortTotals));
-    });
-  }, [fetchTotals, dates, habit]);
+    const totals = dates.reduce((res, date) => {
+      res[date] = date === getLocalToday() ? todayTotal : records?.[date] || 0;
+      return res;
+    }, {});
+    setLocalTotals(totals);
+    setMax(findMaxObj(totals));
+  }, [dates, records, todayTotal]);
 
   return (
     <div className="tracking-container unselectable" ref={ref}>
@@ -28,7 +30,7 @@ export default function HabitTracker() {
           <h2>{habit.title}</h2>
         </div>
       )}
-      <TrackingCalendar totals={totals} max={max} />
+      <TrackingCalendar totals={localTotals} max={max} />
     </div>
   );
 }

@@ -10,14 +10,20 @@ import 'src/styles/Habit.css';
 
 function Habit() {
   const [curr, setCurr] = useState(null);
-  const { habits } = useContext(AppContext);
+  const { habits, fetchTotals } = useContext(AppContext);
   const [records, setRecords] = useState({}); // fixed item => won't change unless saving/upserting new data
   const [todayCounts, setTodaysCounts] = useState({}); // stores all temporary changes that are to be staged
   const [isEditing, setIsEditing] = useState(false);
   const [materials, setMaterials] = useState([]);
+  const [totals, setTotals] = useState({});
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const habitId = Number(searchParams.get('habit_id'));
+
+  const todayTotal = Object.values(todayCounts).reduce(
+    (acc, sum) => acc + sum,
+    0
+  );
 
   // stages changes for each material id
   const handleSave = () => {
@@ -65,8 +71,9 @@ function Habit() {
     if (habits) {
       setCurr(habits.find((habit) => habit.id === habitId));
       fetchMaterials(habitId);
+      fetchTotals(habitId).then((res) => setTotals(res));
     }
-  }, [habits, habitId]);
+  }, [habits, habitId, fetchTotals]);
 
   // fetches materials by habit id
   const fetchMaterials = async (habitId) => {
@@ -126,7 +133,7 @@ function Habit() {
           }}
         >
           <HabitContextProvider habit={curr}>
-            <HabitTracker />
+            <HabitTracker records={totals} todayTotal={todayTotal} />
             <div
               style={{
                 display: 'flex',
