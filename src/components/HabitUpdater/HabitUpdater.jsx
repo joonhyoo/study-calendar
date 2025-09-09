@@ -5,17 +5,28 @@ import { TrackingCalendar } from '../TrackingCalendar/TrackingCalendar';
 import AppContext from 'src/contexts/AppContextProvider';
 import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 
-function HabitUpdater({
-  material,
-  isEditing,
-  updateChanges,
-  todayCount,
-  records,
-}) {
-  const { dates } = useContext(AppContext);
+function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
+  const { dates, shuukanData } = useContext(AppContext);
   const { habit } = useContext(HabitContext);
   const [localTotals, setLocalTotals] = useState({});
   const [max, setMax] = useState(0);
+  const [records, setRecords] = useState([]);
+
+  useEffect(() => {
+    if (!shuukanData) return;
+    const createRecords = () => {
+      const shuukan = shuukanData.find((shuukan) => shuukan.id === habit.id);
+      const materials = shuukan.habit_material;
+      const rec = {};
+      materials
+        .find((m) => m.id === material.id)
+        .habit_records.forEach(
+          (record) => (rec[record.created_on] = record.count)
+        );
+      return rec;
+    };
+    setRecords(createRecords());
+  }, [dates, habit.id, material.id, shuukanData]);
 
   // when page resize, or records change
   // update localTotals and max

@@ -6,7 +6,7 @@ import 'src/styles/Habit.css';
 import supabase from 'src/utils/supabase';
 
 function HabitSettings() {
-  const { habits } = useContext(AppContext);
+  const { habits, shuukanData, setShuukanData } = useContext(AppContext);
   const [tempHabits, setTempHabits] = useState([]);
 
   const navigate = useNavigate();
@@ -27,6 +27,7 @@ function HabitSettings() {
     }
     setTempHabits(temp);
     archiveHabit(habitId);
+    // TODO update shuukan
   };
 
   const archiveHabit = async (habitId) => {

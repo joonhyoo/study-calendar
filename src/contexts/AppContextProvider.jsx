@@ -8,10 +8,38 @@ const AppContext = createContext({});
 const AppContextProvider = ({ children }) => {
   const [claims, setClaims] = useState(null);
   const [habits, setHabits] = useState([]);
+  const [shuukanData, setShuukanData] = useState(null);
   const [dates, setDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
+
+  // fetches Habits, Corresponding Materials, and their Records
+  const fetchAll = async () => {
+    const { data, error } = await supabase.from('habit').select(
+      `
+          title,
+          id,
+          rgbColor,
+          visible,
+          habit_material (
+            title,
+            description,
+            id,
+            visible,
+            habit_records (
+              created_on,
+              count
+            )
+          )
+        `
+    );
+    if (error) {
+      console.warn(error?.message);
+      return null;
+    }
+    return data;
+  };
 
   // fetches user habits
   const fetchHabits = useCallback(() => {
@@ -118,6 +146,7 @@ const AppContextProvider = ({ children }) => {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     setClaims(null);
+    sessionStorage.removeItem('shuukan-data');
     if (error) {
       console.warn('Sign out error:', error.message);
     }
@@ -132,7 +161,21 @@ const AppContextProvider = ({ children }) => {
     fetchHabits();
   }, [fetchHabits]);
 
-  // authorizes user through supabase auth
+  const loadShuukanData = useCallback(async () => {
+    const fetchedData = await fetchAll();
+    const stringifyData = JSON.stringify(fetchedData);
+    const sessionData = sessionStorage.getItem('shuukan-data');
+    if (sessionData !== null && stringifyData === sessionData) {
+      console.log('data same');
+      setShuukanData(JSON.parse(sessionData));
+    } else {
+      console.log('data different');
+      sessionStorage.setItem('shuukan-data', stringifyData);
+      setShuukanData(fetchedData);
+    }
+  }, []);
+
+  // authorizes user through supabase auth then loads data
   useEffect(() => {
     const verifyUser = async () => {
       const { data, error } = await supabase.auth.getClaims();
@@ -141,10 +184,11 @@ const AppContextProvider = ({ children }) => {
         redirect('/login');
       } else {
         setClaims(data.claims);
+        loadShuukanData();
       }
     };
     verifyUser();
-  }, []);
+  }, [loadShuukanData]);
 
   return (
     <AppContext.Provider
@@ -157,6 +201,8 @@ const AppContextProvider = ({ children }) => {
         dates,
         signInWithGitHub,
         signOut,
+        shuukanData,
+        loadShuukanData,
       }}
     >
       <div id="app-container" ref={appRef}>

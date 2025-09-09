@@ -2,9 +2,11 @@ import { createContext } from 'react';
 
 const HabitContext = createContext({});
 
-const HabitContextProvider = ({ children, habit }) => {
+const HabitContextProvider = ({ children, habit, newHabit }) => {
   return (
-    <HabitContext.Provider value={{ habit }}>{children}</HabitContext.Provider>
+    <HabitContext.Provider value={{ habit, newHabit }}>
+      {children}
+    </HabitContext.Provider>
   );
 };
 

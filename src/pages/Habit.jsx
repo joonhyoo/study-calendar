@@ -10,12 +10,11 @@ import 'src/styles/Habit.css';
 
 function Habit() {
   const [curr, setCurr] = useState(null);
-  const { habits, fetchTotals } = useContext(AppContext);
-  const [records, setRecords] = useState({}); // fixed item => won't change unless saving/upserting new data
+  const { habits, shuukanData } = useContext(AppContext);
+  const [savedCount, setSavedCount] = useState({}); // fixed item => won't change unless saving/upserting new data
   const [todayCounts, setTodaysCounts] = useState({}); // stores all temporary changes that are to be staged
   const [isEditing, setIsEditing] = useState(false);
   const [materials, setMaterials] = useState([]);
-  const [totals, setTotals] = useState({});
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const habitId = Number(searchParams.get('habit_id'));
@@ -54,8 +53,7 @@ function Habit() {
   const resetTodayCounts = () => {
     const tempCounts = {};
     materials.forEach((material) => {
-      const id = material.id;
-      tempCounts[id] = records[id]?.[getLocalToday()] ?? 0;
+      tempCounts[material.id] = savedCount[material.id] ?? 0;
     });
     setTodaysCounts(tempCounts);
   };
@@ -68,56 +66,29 @@ function Habit() {
   };
 
   useEffect(() => {
-    if (habits) {
-      setCurr(habits.find((habit) => habit.id === habitId));
-      fetchMaterials(habitId);
-      fetchTotals(habitId).then((res) => setTotals(res));
-    }
-  }, [habits, habitId, fetchTotals]);
-
-  // fetches materials by habit id
-  const fetchMaterials = async (habitId) => {
-    const res = await supabase
-      .from('habit_material')
-      .select('*')
-      .eq('habit_id', habitId);
-    if (res) setMaterials(res.data);
-  };
+    if (!habits || !shuukanData) return;
+    setCurr(habits.find((habit) => habit.id === habitId));
+    const materials = shuukanData
+      .find((shuukan) => shuukan.id === habitId)
+      ?.habit_material.filter((material) => material.visible);
+    setMaterials(materials);
+  }, [habits, habitId, shuukanData]);
 
   useEffect(() => {
-    // fetches records of all material ids
-    const fetchAllRecords = async () => {
-      const materialIds = materials.map((m) => m.id);
-      const { data, error } = await supabase
-        .from('habit_records')
-        .select('created_on, material_id, count')
-        .in('material_id', materialIds);
-      if (error) {
-        console.error(error?.message);
-        return;
-      }
-      const records = {};
-      materialIds.forEach((id) => (records[id] = {}));
-      // sets records
-      data.forEach((record) => {
-        records[record.material_id][record.created_on] = record.count;
-      });
-      setRecords(records);
-
-      // sets todayCount
-      const todayCounts = {};
-      Object.keys(records).forEach((id) => {
-        const todayCount = data.find(
-          (record) =>
-            record.material_id === Number(id) &&
-            record.created_on === getLocalToday()
+    if (!shuukanData) return;
+    const todayCounts = {};
+    shuukanData
+      .find((shuukan) => shuukan.id === habitId)
+      ?.habit_material.filter((material) => material.visible)
+      .forEach((material) => {
+        const todayRecord = material.habit_records.find(
+          (record) => record.created_on === getLocalToday()
         );
-        todayCounts[id] = todayCount?.count ?? 0;
+        todayCounts[material.id] = todayRecord?.count || 0;
       });
-      setTodaysCounts(todayCounts);
-    };
-    fetchAllRecords();
-  }, [materials]);
+    setTodaysCounts(todayCounts);
+    setSavedCount(todayCounts);
+  }, [habitId, materials, shuukanData]);
 
   return (
     <div>
@@ -133,7 +104,7 @@ function Habit() {
           }}
         >
           <HabitContextProvider habit={curr}>
-            <HabitTracker records={totals} todayTotal={todayTotal} />
+            <HabitTracker todayTotal={todayTotal} />
             <div
               style={{
                 display: 'flex',
@@ -175,7 +146,6 @@ function Habit() {
               .map((material, index) => (
                 <HabitUpdater
                   key={index}
-                  records={records[material.id]}
                   material={material}
                   todayCount={todayCounts[material.id]}
                   updateChanges={updateChanges}
