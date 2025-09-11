@@ -91,41 +91,22 @@ function Habit() {
 
   return (
     <div>
-      <a onClick={() => navigate('/home')} className="clickable unstyled-link">
+      <a onClick={() => navigate('/home')} className="hover:cursor-pointer">
         <h1 style={{ marginBottom: '48px' }}>◂ home</h1>
       </a>
       {curr && (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
+        <div className="flex flex-col gap-[16px]">
           <HabitContextProvider habit={curr}>
             <HabitTracker todayTotal={todayTotal} />
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-              }}
-            >
+            <div className="flex justify-end">
               {isEditing ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '8px',
-                  }}
-                >
-                  <button
-                    onClick={handleSave}
-                    className="styled-button clickable"
-                  >
+                <div className="flex gap-[8px]">
+                  <button onClick={handleSave} className="hover:cursor-pointer">
                     save
                   </button>
                   <button
                     onClick={handleCancel}
-                    className="styled-button clickable"
+                    className="hover:cursor-pointer"
                   >
                     cancel
                   </button>
@@ -133,7 +114,7 @@ function Habit() {
               ) : (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="styled-button clickable"
+                  className="hover:cursor-pointer"
                 >
                   edit
                 </button>

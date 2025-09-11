@@ -42,10 +42,10 @@ export default function HabitTracker({ todayTotal }) {
   }, [dates, habit.id, localToday, shuukanData, todayTotal]);
 
   return (
-    <div className="tracking-container unselectable" ref={ref}>
+    <div className="bg-[#323334] flex flex-col gap-[24px] p-[24px]" ref={ref}>
       {habit && (
-        <div className="tracker-title-container">
-          <h2>{habit.title}</h2>
+        <div className="flex justify-between">
+          <h2 className="font-bold text-[20px]">{habit.title}</h2>
         </div>
       )}
       <TrackingCalendar totals={localTotals} max={max} />

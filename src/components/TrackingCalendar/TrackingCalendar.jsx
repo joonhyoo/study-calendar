@@ -2,7 +2,11 @@ import DateBox from 'src/components/DateBox/DateBox';
 
 export const TrackingCalendar = ({ totals, max, short }) => {
   return (
-    <div className={`tracking-calendar ${short && 'short'}`}>
+    <div
+      className={
+        'gap-[4px] ' + (short ? 'flex' : 'grid grid-flow-col grid-rows-7')
+      }
+    >
       {totals &&
         Object.keys(totals).map((x, i) => (
           <DateBox key={i} ratio={totals[x] / max || 0} />

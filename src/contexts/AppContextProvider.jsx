@@ -20,7 +20,7 @@ const AppContextProvider = ({ children }) => {
       `
           title,
           id,
-          rgbColor,
+          hexCode,
           visible,
           habit_material (
             title,
@@ -49,7 +49,7 @@ const AppContextProvider = ({ children }) => {
         `
           title,
           id,
-          rgbColor,
+          hexCode,
           visible
         `
       )
@@ -101,10 +101,16 @@ const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const handleResize = () => {
       if (!appRef.current) return;
-      const currWidth = appRef.current.clientWidth - 64;
-      setAvailCols(Math.max(1, Math.floor((currWidth - 12) / (12 + 4)) + 1));
+      const outterPadding = 32 * 2;
+      const innerPadding = 24 * 2;
+      const currWidth =
+        appRef.current.clientWidth - outterPadding - innerPadding;
+      const boxSize = 12;
+      const gap = 4;
+      setAvailCols(
+        Math.max(1, Math.floor((currWidth - boxSize) / (boxSize + gap)) + 1)
+      );
     };
-
     const resizeObserver = new ResizeObserver(() => {
       if (appRef.current) {
         handleResize();
@@ -205,7 +211,7 @@ const AppContextProvider = ({ children }) => {
         loadShuukanData,
       }}
     >
-      <div id="app-container" ref={appRef}>
+      <div ref={appRef} className="max-w-[430px] m-auto px-[32px] py-[64px]">
         {children}
       </div>
     </AppContext.Provider>

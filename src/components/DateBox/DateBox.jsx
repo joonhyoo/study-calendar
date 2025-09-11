@@ -1,25 +1,15 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import HabitContext from 'src/contexts/HabitContextProvider';
 
 function DateBox({ ratio }) {
   const { habit } = useContext(HabitContext);
-  const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
-
-  useEffect(() => {
-    if (ratio === 0) {
-      setBgColor('#C4C4C4');
-    } else {
-      setBgColor('rgba(' + habit.rgbColor + ',' + ratio + ')');
-    }
-  }, [bgColor, habit.rgbColor, ratio]);
 
   return (
     <div
-      className="date-box"
+      className="size-[12px] rounded-[3px]"
       style={{
-        backgroundColor: bgColor,
-        width: 12,
-        height: 12,
+        opacity: ratio === 0 ? 1 : ratio,
+        backgroundColor: ratio === 0 ? '#C4C4C4' : habit.hexCode,
       }}
     />
   );

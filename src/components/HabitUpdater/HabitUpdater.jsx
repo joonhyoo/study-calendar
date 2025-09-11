@@ -49,43 +49,25 @@ function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
 
   return (
     habit && (
-      <div className="updater-container unselectable">
-        <h4 style={{ fontSize: '20px', fontWeight: 700 }}>{material.title}</h4>
+      <div className="bg-[#323334] flex flex-col gap-[16px] p-[24px]">
+        <h4 className="text-[20px] font-[700]">{material.title}</h4>
         <TrackingCalendar totals={localTotals} max={max} short />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
+        <div className="flex justify-between items-center">
           <p>Completed:</p>
           <div
-            style={{
-              display: 'flex',
-              gap: '4px',
-              padding: '4px',
-              width: '86px',
-              justifyContent: 'center',
-              backgroundColor: isEditing && 'rgba(255, 255, 255, 0.05)',
-            }}
+            className={
+              'flex gap-[4px] p-[4px] w-[86px] justify-center ' +
+              (isEditing && 'bg-[#ffffff0d]')
+            }
           >
             {isEditing && (
-              <button
-                className="modifier-button clickable"
-                onClick={handleMinus}
-              >
+              <button className="hover:cursor-pointer" onClick={handleMinus}>
                 &minus;
               </button>
             )}
-            <p style={{ width: '30px', textAlign: 'center' }}>
-              {todayCount && todayCount}
-            </p>
+            <p className="w-[30px] text-center">{todayCount && todayCount}</p>
             {isEditing && (
-              <button
-                className="modifier-button clickable"
-                onClick={handlePlus}
-              >
+              <button className="hover:cursor-pointer" onClick={handlePlus}>
                 &#43;
               </button>
             )}
