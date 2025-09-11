@@ -4,13 +4,13 @@ import HabitContext from 'src/contexts/HabitContextProvider';
 
 function DateBox({ ratio }) {
   const { habit } = useContext(HabitContext);
-  const [bgColor, setBgColor] = useState('rgb(241, 241, 241)');
+  const [bgColor, setBgColor] = useState('#f1f1f1');
 
   useEffect(() => {
     if (ratio === 0) {
       setBgColor('#C4C4C4');
     } else {
-      setBgColor('rgba(' + habit.hexCode + ',' + ratio + ')');
+      setBgColor(habit.hexCode);
     }
   }, [bgColor, habit.hexCode, ratio]);
 
@@ -19,6 +19,7 @@ function DateBox({ ratio }) {
       className="date-box"
       style={{
         backgroundColor: bgColor,
+        opacity: ratio === 0 ? 100 : ratio,
         width: 12,
         height: 12,
       }}
