@@ -10,9 +10,9 @@ function DateBox({ ratio }) {
     if (ratio === 0) {
       setBgColor('#C4C4C4');
     } else {
-      setBgColor('rgba(' + habit.rgbColor + ',' + ratio + ')');
+      setBgColor('rgba(' + habit.hexCode + ',' + ratio + ')');
     }
-  }, [bgColor, habit.rgbColor, ratio]);
+  }, [bgColor, habit.hexCode, ratio]);
 
   return (
     <div

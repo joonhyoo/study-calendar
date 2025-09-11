@@ -20,7 +20,7 @@ const AppContextProvider = ({ children }) => {
       `
           title,
           id,
-          rgbColor,
+          hexCode,
           visible,
           habit_material (
             title,
@@ -49,7 +49,7 @@ const AppContextProvider = ({ children }) => {
         `
           title,
           id,
-          rgbColor,
+          hexCode,
           visible
         `
       )

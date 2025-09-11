@@ -38,17 +38,17 @@ function HabitSettings() {
     if (error) console.error(error.message);
   };
 
-  const insertHabit = async ({ title, id, rgbColor }) => {
+  const insertHabit = async ({ title, id, hexCode }) => {
     const { error } = await supabase
       .from('habit')
-      .insert({ title: title, rgbColor: rgbColor, id: id });
+      .insert({ title: title, hexCode: hexCode, id: id });
     if (error) console.error(error.message);
   };
 
   const handleAddHabit = () => {
     const id = generateUniqueID();
     const temp = [...tempHabits];
-    const newHabit = { title: 'title', id: id, rgbColor: '0, 0, 0' };
+    const newHabit = { title: 'title', id: id };
     temp.push(newHabit);
     insertHabit(newHabit);
     setTempHabits(temp);
