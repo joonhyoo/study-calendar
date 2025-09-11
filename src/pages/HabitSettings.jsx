@@ -5,14 +5,15 @@ import AppContext from 'src/contexts/AppContextProvider';
 import supabase from 'src/utils/supabase';
 
 function HabitSettings() {
-  const { habits, shuukanData, setShuukanData } = useContext(AppContext);
+  const { shuukanData } = useContext(AppContext);
   const [tempHabits, setTempHabits] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTempHabits(habits.filter((habit) => habit.visible));
-  }, [habits]);
+    if (!shuukanData) return;
+    setTempHabits(shuukanData.filter((habit) => habit.visible));
+  }, [shuukanData]);
 
   const generateUniqueID = () => {
     return Math.random().toString().slice(2, 11);
@@ -26,7 +27,6 @@ function HabitSettings() {
     }
     setTempHabits(temp);
     archiveHabit(habitId);
-    // TODO update shuukan
   };
 
   const archiveHabit = async (habitId) => {

@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
+import { StyledButton } from './StyledButton';
+import AppContext from 'src/contexts/AppContextProvider';
 
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
+  const { shuukanData } = useContext(AppContext);
   const [materials, setMaterials] = useState([]); // immutable, won't change.
   const [title, setTitle] = useState(habit.title); // this one changes
 
@@ -17,20 +20,6 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
       clearTimeout(handler);
     };
   }, [habit.title, title]);
-
-  // fetches materials by habit id
-  const fetchMaterials = async (habitId) => {
-    const { data, error } = await supabase
-      .from('habit_material')
-      .select('title, description, id')
-      .eq('habit_id', habitId)
-      .eq('visible', true);
-    if (error) {
-      console.error(error.message);
-    } else {
-      setMaterials(data);
-    }
-  };
 
   const handleArchiveMaterial = (materialId) => {
     const tempMaterials = [...materials];
@@ -53,8 +42,12 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
   };
 
   useEffect(() => {
-    fetchMaterials(habit.id);
-  }, [habit.id]);
+    setMaterials(
+      shuukanData
+        .find((h) => h.id === habit.id)
+        .habit_material.filter((material) => material.visible)
+    );
+  }, [habit.id, shuukanData]);
 
   const generateUniqueID = () => {
     return Math.random().toString().slice(2, 11);
@@ -108,12 +101,10 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
             if (e.target.value.length <= 20) setTitle(e.target.value);
           }}
         />
-        <button
-          className="hover:cursor-pointer hover:brightness-75 px-[16px]"
+        <StyledButton
           onClick={() => handleArchiveHabit(habit.id)}
-        >
-          archive
-        </button>
+          content="archive"
+        />
       </div>
       {materials.map((material, index) => (
         <MaterialEditor

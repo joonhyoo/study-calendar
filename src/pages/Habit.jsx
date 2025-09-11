@@ -9,7 +9,7 @@ import supabase from 'src/utils/supabase';
 
 function Habit() {
   const [curr, setCurr] = useState(null);
-  const { habits, shuukanData } = useContext(AppContext);
+  const { shuukanData } = useContext(AppContext);
   const [savedCount, setSavedCount] = useState({}); // fixed item => won't change unless saving/upserting new data
   const [todayCounts, setTodaysCounts] = useState({}); // stores all temporary changes that are to be staged
   const [isEditing, setIsEditing] = useState(false);
@@ -65,13 +65,13 @@ function Habit() {
   };
 
   useEffect(() => {
-    if (!habits || !shuukanData) return;
-    setCurr(habits.find((habit) => habit.id === habitId));
+    if (!shuukanData) return;
+    setCurr(shuukanData.find((habit) => habit.id === habitId));
     const materials = shuukanData
       .find((shuukan) => shuukan.id === habitId)
       ?.habit_material.filter((material) => material.visible);
     setMaterials(materials);
-  }, [habits, habitId, shuukanData]);
+  }, [habitId, shuukanData]);
 
   useEffect(() => {
     if (!shuukanData) return;
@@ -91,13 +91,11 @@ function Habit() {
 
   return (
     <div>
-      <a onClick={() => navigate('/home')} className="hover:cursor-pointer">
-        <a
-          onClick={() => navigate('/home')}
-          className="hover:cursor-pointer hover:brightness-75"
-        >
-          <h1 className="text-[40px] font-bold">◂ home</h1>
-        </a>
+      <a
+        onClick={() => navigate('/home')}
+        className="hover:cursor-pointer hover:brightness-75"
+      >
+        <h1 className="text-[40px] font-bold">◂ home</h1>
       </a>
       {curr && (
         <div className="flex flex-col gap-[16px]">

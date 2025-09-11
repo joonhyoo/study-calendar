@@ -7,7 +7,6 @@ const AppContext = createContext({});
 
 const AppContextProvider = ({ children }) => {
   const [claims, setClaims] = useState(null);
-  const [habits, setHabits] = useState([]);
   const [shuukanData, setShuukanData] = useState(null);
   const [dates, setDates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,21 +39,6 @@ const AppContextProvider = ({ children }) => {
     }
     return data;
   };
-
-  // fetches user habits
-  const fetchHabits = useCallback(() => {
-    supabase
-      .from('habit')
-      .select(
-        `
-          title,
-          id,
-          hexCode,
-          visible
-        `
-      )
-      .then((res) => setHabits(res.data));
-  }, []);
 
   // fetches object of materialId : total for all materials under habit_id
   const fetchTotals = (habit_id) => {
@@ -163,10 +147,6 @@ const AppContextProvider = ({ children }) => {
     claims ? setIsLoading(false) : setIsLoading(true);
   }, [claims]);
 
-  useEffect(() => {
-    fetchHabits();
-  }, [fetchHabits]);
-
   const loadShuukanData = useCallback(async () => {
     const fetchedData = await fetchAll();
     const stringifyData = JSON.stringify(fetchedData);
@@ -201,7 +181,6 @@ const AppContextProvider = ({ children }) => {
       value={{
         claims,
         isLoading,
-        habits,
         fetchTotals,
         fetchMaterialTotals,
         dates,

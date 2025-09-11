@@ -3,6 +3,7 @@ import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from './TrackingCalendar';
 import AppContext from 'src/contexts/AppContextProvider';
 import { findMaxObj, getLocalToday } from 'src/utils/helpers';
+import { StyledButton } from './StyledButton';
 
 function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
   const { dates, shuukanData } = useContext(AppContext);
@@ -61,16 +62,10 @@ function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
             }
           >
             {isEditing && (
-              <button className="hover:cursor-pointer" onClick={handleMinus}>
-                &minus;
-              </button>
+              <StyledButton onClick={handleMinus} content="&minus;" />
             )}
             <p className="w-[30px] text-center">{todayCount && todayCount}</p>
-            {isEditing && (
-              <button className="hover:cursor-pointer" onClick={handlePlus}>
-                &#43;
-              </button>
-            )}
+            {isEditing && <StyledButton onClick={handlePlus} content="&#43;" />}
           </div>
         </div>
       </div>

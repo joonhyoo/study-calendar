@@ -5,8 +5,7 @@ import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 
 export default function Home() {
-  const { habits, signOut, shuukanData, loadShuukanData } =
-    useContext(AppContext);
+  const { signOut, shuukanData, loadShuukanData } = useContext(AppContext);
 
   useEffect(() => {
     loadShuukanData();
@@ -40,9 +39,8 @@ export default function Home() {
         Settings
       </button>
       <div className="flex flex-col gap-8">
-        {habits &&
-          shuukanData &&
-          habits
+        {shuukanData &&
+          shuukanData
             .filter((habit) => habit.visible)
             .map((habit, index) => (
               <div
