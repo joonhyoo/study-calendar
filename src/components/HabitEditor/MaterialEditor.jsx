@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './Editor.css';
 
 export const MaterialEditor = ({
   material,

@@ -4,7 +4,6 @@ import Profile from 'src/pages/Profile';
 import Habit from 'src/pages/Habit';
 import PrivateRoute from './utils/PrivateRoute';
 import Login from './pages/Login';
-import 'src/styles/App.css';
 import HabitSettings from './pages/HabitSettings';
 
 function App() {

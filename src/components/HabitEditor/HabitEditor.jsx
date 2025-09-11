@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
-import './Editor.css';
 
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
   const [materials, setMaterials] = useState([]); // immutable, won't change.

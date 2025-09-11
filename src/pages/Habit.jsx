@@ -6,7 +6,6 @@ import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 import { getLocalToday } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
-import 'src/styles/Habit.css';
 
 function Habit() {
   const [curr, setCurr] = useState(null);

@@ -1,5 +1,4 @@
 import DateBox from 'src/components/DateBox/DateBox';
-import './TrackingCalendar.css';
 
 export const TrackingCalendar = ({ totals, max, short }) => {
   return (

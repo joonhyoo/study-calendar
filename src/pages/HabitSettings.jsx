@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HabitEditor from 'src/components/HabitEditor/HabitEditor';
 import AppContext from 'src/contexts/AppContextProvider';
-import 'src/styles/Habit.css';
 import supabase from 'src/utils/supabase';
 
 function HabitSettings() {

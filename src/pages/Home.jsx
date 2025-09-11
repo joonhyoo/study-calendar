@@ -3,7 +3,6 @@ import { useContext, useEffect } from 'react';
 import HabitTracker from 'src/components/HabitTracker/HabitTracker';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
-import 'src/styles/Home.css';
 
 export default function Home() {
   const { habits, signOut, shuukanData, loadShuukanData } =
@@ -20,24 +19,27 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1 style={{ marginBottom: '48px' }}>Habit Tracker</h1>
+    <div className="flex flex-col max-w-sm m-auto">
+      <h1 className="text-3xl font-bold">Habit Tracker</h1>
       <button
         onClick={() => navigate('/profile')}
-        style={{ backgroundColor: 'black' }}
+        className="bg-transparent hover:brightness-75 cursor-pointer"
       >
         Go to Profile
       </button>
-      <button onClick={handleSignOut} style={{ backgroundColor: 'black' }}>
+      <button
+        onClick={handleSignOut}
+        className="bg-transparent hover:brightness-75 cursor-pointer"
+      >
         Sign Out
       </button>
       <button
         onClick={() => navigate('/settings')}
-        style={{ backgroundColor: 'black' }}
+        className="bg-transparent hover:brightness-75 cursor-pointer"
       >
         Settings
       </button>
-      <div id="habits-container">
+      <div className="flex flex-col gap-8">
         {habits &&
           shuukanData &&
           habits
@@ -45,7 +47,7 @@ export default function Home() {
             .map((habit, index) => (
               <div
                 key={index}
-                className="clickable"
+                className="hover:brightness-75 cursor-pointer"
                 onClick={() => navigate('/habit?habit_id=' + habit.id)}
               >
                 <HabitContextProvider habit={habit}>

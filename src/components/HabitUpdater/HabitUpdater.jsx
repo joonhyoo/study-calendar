@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import './HabitUpdater.css';
 import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from '../TrackingCalendar/TrackingCalendar';
 import AppContext from 'src/contexts/AppContextProvider';

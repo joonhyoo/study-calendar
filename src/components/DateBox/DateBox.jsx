@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import './DateBox.css';
 import HabitContext from 'src/contexts/HabitContextProvider';
 
 function DateBox({ ratio }) {

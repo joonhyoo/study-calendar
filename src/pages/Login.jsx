@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from 'src/contexts/AppContextProvider';
-import 'src/styles/Login.css';
 
 export default function Login() {
   const { signInWithGitHub, claims } = useContext(AppContext);
