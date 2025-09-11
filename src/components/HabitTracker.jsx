@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import AppContext from 'src/contexts/AppContextProvider';
 import HabitContext from 'src/contexts/HabitContextProvider';
-import { TrackingCalendar } from '../TrackingCalendar/TrackingCalendar';
+import { TrackingCalendar } from './TrackingCalendar';
 import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 
 export default function HabitTracker({ todayTotal }) {

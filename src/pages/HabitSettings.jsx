@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HabitEditor from 'src/components/HabitEditor/HabitEditor';
+import HabitEditor from 'src/components/HabitEditor';
 import AppContext from 'src/contexts/AppContextProvider';
 import supabase from 'src/utils/supabase';
 
@@ -54,17 +54,14 @@ function HabitSettings() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '48px',
-      }}
-    >
-      <a onClick={() => navigate('/home')} className="clickable unstyled-link">
-        <h1>◂ home</h1>
+    <div className="flex flex-col gap-[48px]">
+      <a
+        onClick={() => navigate('/home')}
+        className="hover:cursor-pointer hover:brightness-75"
+      >
+        <h1 className="text-[40px] font-bold">◂ home</h1>
       </a>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <div className="flex flex-col gap-[32px]">
         {tempHabits.map((habit, index) => (
           <HabitEditor
             key={index}
@@ -73,8 +70,11 @@ function HabitSettings() {
           />
         ))}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <button className="clickable standard-button" onClick={handleAddHabit}>
+      <div className="flex justify-center">
+        <button
+          className="hover:cursor-pointer hover:brightness-75"
+          onClick={handleAddHabit}
+        >
           add habit
         </button>
       </div>

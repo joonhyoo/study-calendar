@@ -16,32 +16,20 @@ export const MaterialEditor = ({
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        padding: '16px',
-        backgroundColor: '#323334',
-      }}
-    >
-      <div className="upper" style={{ display: 'flex' }}>
+    <div className="flex flex-col gap-[16px] p-[16px] bg-[#323334]">
+      <div className="flex">
         <input
-          className="updatable-input"
+          className="w-full p-[8px] text-[20px]"
           type="text"
           value={title}
           onChange={(e) => {
             if (e.target.value.length <= 20) setTitle(e.target.value);
           }}
-          style={{
-            fontSize: '20px',
-            padding: '8px',
-          }}
           onClick={() => setIsExpand(true)}
         />
         {isExpand && (
           <button
-            className="clickable standard-button"
+            className="hover:cursor-pointer hover:brightness-75 px-[16px]"
             onClick={() => handleArchiveMaterial(material.id)}
           >
             archive
@@ -50,28 +38,17 @@ export const MaterialEditor = ({
       </div>
       {isExpand && (
         <textarea
-          className={'updatable-input'}
+          className="resize-none h-22 p-[8px] text-[16px] bg-[#404142]"
           value={description}
           onChange={(e) => {
-            if (e.target.value.length <= 75) setDescription(e.target.value);
-          }}
-          style={{
-            resize: 'none',
-            outline: '0.25px solid #DADADA',
-            height: '3em',
+            if (e.target.value.length <= 100) setDescription(e.target.value);
           }}
         />
       )}
       {isExpand && (
-        <div
-          style={{
-            display: 'flex',
-            gap: '32px',
-            justifyContent: 'center',
-          }}
-        >
+        <div className="flex gap-[32px] justify-center">
           <button
-            className="clickable standard-button"
+            className="hover:cursor-pointer hover:brightness-75"
             onClick={() => {
               handleSave(title, description, material.id);
               setIsExpand(false);
@@ -79,7 +56,10 @@ export const MaterialEditor = ({
           >
             save
           </button>
-          <button className="clickable standard-button" onClick={handleCancel}>
+          <button
+            className="hover:cursor-pointer hover:brightness-75"
+            onClick={handleCancel}
+          >
             cancel
           </button>
         </div>

@@ -98,31 +98,18 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#212121',
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-      }}
-    >
-      <div style={{ display: 'flex' }}>
+    <div className="flex flex-col gap-[16px] p-[16px] bg-[#212121]">
+      <div className="flex">
         <input
+          className="w-full text-[24px] font-bold p-[8px]"
           type="text"
           value={title}
           onChange={(e) => {
             if (e.target.value.length <= 20) setTitle(e.target.value);
           }}
-          style={{
-            width: '100%',
-            fontSize: '24px',
-            fontWeight: 'bold',
-          }}
-          className={`updatable-input`}
         />
         <button
-          className="clickable standard-button"
+          className="hover:cursor-pointer hover:brightness-75 px-[16px]"
           onClick={() => handleArchiveHabit(habit.id)}
         >
           archive
@@ -136,9 +123,9 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
           handleArchiveMaterial={handleArchiveMaterial}
         />
       ))}
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div className="flex justify-center">
         <button
-          className="clickable standard-button"
+          className="hover:cursor-pointer hover:brightness-75 px-[16px]"
           onClick={handleAddMaterial}
         >
           + Add material

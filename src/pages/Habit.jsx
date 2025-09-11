@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import HabitTracker from 'src/components/HabitTracker/HabitTracker';
-import HabitUpdater from 'src/components/HabitUpdater/HabitUpdater';
+import HabitTracker from 'src/components/HabitTracker';
+import HabitUpdater from 'src/components/HabitUpdater';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 import { getLocalToday } from 'src/utils/helpers';
@@ -92,7 +92,12 @@ function Habit() {
   return (
     <div>
       <a onClick={() => navigate('/home')} className="hover:cursor-pointer">
-        <h1 style={{ marginBottom: '48px' }}>◂ home</h1>
+        <a
+          onClick={() => navigate('/home')}
+          className="hover:cursor-pointer hover:brightness-75"
+        >
+          <h1 className="text-[40px] font-bold">◂ home</h1>
+        </a>
       </a>
       {curr && (
         <div className="flex flex-col gap-[16px]">

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
-import HabitTracker from 'src/components/HabitTracker/HabitTracker';
+import HabitTracker from 'src/components/HabitTracker';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 
@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col ">
-      <h1 className="text-3xl font-bold">Habit Tracker</h1>
+      <h1 className="text-[40px] font-bold">Habit Tracker</h1>
       <button
         onClick={() => navigate('/profile')}
         className="bg-transparent hover:brightness-75 cursor-pointer"

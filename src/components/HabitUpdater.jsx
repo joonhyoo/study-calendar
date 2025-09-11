@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import HabitContext from 'src/contexts/HabitContextProvider';
-import { TrackingCalendar } from '../TrackingCalendar/TrackingCalendar';
+import { TrackingCalendar } from './TrackingCalendar';
 import AppContext from 'src/contexts/AppContextProvider';
 import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 

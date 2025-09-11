@@ -12,22 +12,36 @@ export default function Login() {
     }
   }, [navigate, claims]);
 
+  //   #login-popup {
+  //   margin: auto;
+  //   display: flex;
+  //   flex-direction: column;
+  //   text-align: center;
+  //   background-color: #5596ff;
+  //   gap: 32px;
+  //   padding: 32px 48px;
+  // }
+
+  // #login-button {
+  //   background-color: white;
+  //   border: 2px solid black;
+  //   color: black;
+  // }
   return (
-    <div id="login-popup">
+    <div className="bg-[#212121] flex flex-col justify-center p-[24px] gap-[32px]">
       <div>
-        <h1>Habit Tracker</h1>
+        <h1 className="text-[40px] font-bold w-full">Habit Tracker</h1>
         <p>sign in to continue</p>
       </div>
       <button
-        id="login-button"
-        className="clickable"
+        className="hover:cursor-pointer hover:brightness-75 flex gap-4 justify-center items-center py-[8px] bg-[#323334]"
         onClick={signInWithGitHub}
       >
         Sign in with GitHub
         <img
-          id="github-logo-img"
+          className="size-[16px]"
           alt="GitHub logo"
-          src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"
+          src="/white-github-logo.png"
         />
       </button>
     </div>
