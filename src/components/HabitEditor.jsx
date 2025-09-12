@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
 import { StyledButton } from './StyledButton';
-import AppContext from 'src/contexts/AppContextProvider';
 
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
   const [materials, setMaterials] = useState([]); // immutable, won't change.
@@ -10,15 +9,24 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
 
   // useEffect autosaves Habit Title only
   useEffect(() => {
+    const saveTitle = async () => {
+      const { error } = await supabase
+        .from('habit')
+        .update({ title: title })
+        .eq('id', habit.id);
+      if (error) console.warn(error);
+    };
+
     if (title === habit.title) return;
     const handler = setTimeout(() => {
       console.log('Autosaving:', title);
+      saveTitle();
     }, 1000);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [habit.title, title]);
+  }, [habit, title]);
 
   const handleArchiveMaterial = (materialId) => {
     const tempMaterials = [...materials];
