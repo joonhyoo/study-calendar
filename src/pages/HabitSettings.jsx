@@ -47,7 +47,7 @@ function HabitSettings() {
   const handleAddHabit = () => {
     const id = generateUniqueID();
     const temp = [...tempHabits];
-    const newHabit = { title: 'title', id: id };
+    const newHabit = { title: 'title', id: id, habit_material: [] };
     temp.push(newHabit);
     insertHabit(newHabit);
     setTempHabits(temp);

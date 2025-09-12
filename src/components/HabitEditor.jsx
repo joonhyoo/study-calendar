@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
 import { StyledButton } from './StyledButton';
 import AppContext from 'src/contexts/AppContextProvider';
 
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
-  const { shuukanData } = useContext(AppContext);
   const [materials, setMaterials] = useState([]); // immutable, won't change.
   const [title, setTitle] = useState(habit.title); // this one changes
 
@@ -42,12 +41,8 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
   };
 
   useEffect(() => {
-    setMaterials(
-      shuukanData
-        .find((h) => h.id === habit.id)
-        .habit_material.filter((material) => material.visible)
-    );
-  }, [habit.id, shuukanData]);
+    setMaterials(habit.habit_material.filter((material) => material.visible));
+  }, [habit]);
 
   const generateUniqueID = () => {
     return Math.random().toString().slice(2, 11);
