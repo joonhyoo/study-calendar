@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HabitEditor from 'src/components/HabitEditor';
+import { StyledButton } from 'src/components/StyledButton';
 import AppContext from 'src/contexts/AppContextProvider';
 import supabase from 'src/utils/supabase';
 
@@ -71,12 +72,7 @@ function HabitSettings() {
         ))}
       </div>
       <div className="flex justify-center">
-        <button
-          className="hover:cursor-pointer hover:brightness-75"
-          onClick={handleAddHabit}
-        >
-          add habit
-        </button>
+        <StyledButton onClick={handleAddHabit} content="add habit" />
       </div>
     </div>
   );

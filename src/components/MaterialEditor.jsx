@@ -52,21 +52,14 @@ export const MaterialEditor = ({
       )}
       {isExpand && (
         <div className="flex gap-[32px] justify-center">
-          <button
-            className="hover:cursor-pointer hover:brightness-75"
+          <StyledButton
+            content={'save'}
             onClick={() => {
               handleSave(title, description, material.id);
               setIsExpand(false);
             }}
-          >
-            save
-          </button>
-          <button
-            className="hover:cursor-pointer hover:brightness-75"
-            onClick={handleCancel}
-          >
-            cancel
-          </button>
+          />
+          <StyledButton content={'cancel'} onClick={handleCancel} />
         </div>
       )}
     </div>

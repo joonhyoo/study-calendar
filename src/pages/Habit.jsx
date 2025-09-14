@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import HabitTracker from 'src/components/HabitTracker';
 import HabitUpdater from 'src/components/HabitUpdater';
+import { StyledButton } from 'src/components/StyledButton';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
 import { getLocalToday } from 'src/utils/helpers';
@@ -103,24 +104,15 @@ function Habit() {
             <HabitTracker todayTotal={todayTotal} />
             <div className="flex justify-end">
               {isEditing ? (
-                <div className="flex gap-[8px]">
-                  <button onClick={handleSave} className="hover:cursor-pointer">
-                    save
-                  </button>
-                  <button
-                    onClick={handleCancel}
-                    className="hover:cursor-pointer"
-                  >
-                    cancel
-                  </button>
+                <div className="flex">
+                  <StyledButton onClick={handleSave} content={'save'} />
+                  <StyledButton onClick={handleCancel} content={'cancel'} />
                 </div>
               ) : (
-                <button
+                <StyledButton
                   onClick={() => setIsEditing(true)}
-                  className="hover:cursor-pointer"
-                >
-                  edit
-                </button>
+                  content={'edit'}
+                />
               )}
             </div>
 

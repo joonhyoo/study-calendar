@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react';
 import HabitTracker from 'src/components/HabitTracker';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
+import { StyledButton } from 'src/components/StyledButton';
 
 export default function Home() {
   const { signOut, shuukanData, loadShuukanData } = useContext(AppContext);
@@ -20,24 +21,15 @@ export default function Home() {
   return (
     <div className="flex flex-col ">
       <h1 className="text-[40px] font-bold">Habit Tracker</h1>
-      <button
+      <StyledButton
+        content={'Go to Profile'}
         onClick={() => navigate('/profile')}
-        className="bg-transparent hover:brightness-75 cursor-pointer"
-      >
-        Go to Profile
-      </button>
-      <button
-        onClick={handleSignOut}
-        className="bg-transparent hover:brightness-75 cursor-pointer"
-      >
-        Sign Out
-      </button>
-      <button
+      />
+      <StyledButton onClick={handleSignOut} content={'Sign Out'} />
+      <StyledButton
         onClick={() => navigate('/settings')}
-        className="bg-transparent hover:brightness-75 cursor-pointer"
-      >
-        Settings
-      </button>
+        content={'Settings'}
+      />
       <div className="flex flex-col gap-8">
         {shuukanData &&
           shuukanData

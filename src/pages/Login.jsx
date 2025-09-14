@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { StyledButton } from 'src/components/StyledButton';
 import AppContext from 'src/contexts/AppContextProvider';
 
 export default function Login() {

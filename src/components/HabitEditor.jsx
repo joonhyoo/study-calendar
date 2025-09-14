@@ -123,12 +123,7 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
         />
       ))}
       <div className="flex justify-center">
-        <button
-          className="hover:cursor-pointer hover:brightness-75 px-[16px]"
-          onClick={handleAddMaterial}
-        >
-          + Add material
-        </button>
+        <StyledButton onClick={handleAddMaterial} content={'+ Add material'} />
       </div>
     </div>
   );
