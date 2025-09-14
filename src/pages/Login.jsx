@@ -13,21 +13,6 @@ export default function Login() {
     }
   }, [navigate, claims]);
 
-  //   #login-popup {
-  //   margin: auto;
-  //   display: flex;
-  //   flex-direction: column;
-  //   text-align: center;
-  //   background-color: #5596ff;
-  //   gap: 32px;
-  //   padding: 32px 48px;
-  // }
-
-  // #login-button {
-  //   background-color: white;
-  //   border: 2px solid black;
-  //   color: black;
-  // }
   return (
     <div className="bg-[#212121] flex flex-col justify-center p-[24px] gap-[32px]">
       <div>

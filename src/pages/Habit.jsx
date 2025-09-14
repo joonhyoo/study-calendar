@@ -118,9 +118,9 @@ function Habit() {
 
             {materials
               .filter((material) => material.visible)
-              .map((material, index) => (
+              .map((material) => (
                 <HabitUpdater
-                  key={index}
+                  key={material.id}
                   material={material}
                   todayCount={todayCounts[material.id]}
                   updateChanges={updateChanges}

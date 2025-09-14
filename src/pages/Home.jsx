@@ -34,9 +34,9 @@ export default function Home() {
         {shuukanData &&
           shuukanData
             .filter((habit) => habit.visible)
-            .map((habit, index) => (
+            .map((habit) => (
               <div
-                key={index}
+                key={habit.id}
                 className="hover:brightness-75 cursor-pointer"
                 onClick={() => navigate('/habit?habit_id=' + habit.id)}
               >
