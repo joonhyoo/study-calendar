@@ -47,7 +47,7 @@ function HabitSettings() {
   const handleAddHabit = () => {
     const id = generateUniqueID();
     const temp = [...tempHabits];
-    const newHabit = { title: 'title', id: id, habit_material: [] };
+    const newHabit = { title: 'habit title', id: id, habit_material: [] };
     temp.push(newHabit);
     insertHabit(newHabit);
     setTempHabits(temp);
@@ -62,9 +62,9 @@ function HabitSettings() {
         <h1 className="text-[40px] font-bold">◂ home</h1>
       </a>
       <div className="flex flex-col gap-[32px]">
-        {tempHabits.map((habit, index) => (
+        {tempHabits.map((habit) => (
           <HabitEditor
-            key={index}
+            key={habit.id}
             habit={habit}
             handleArchiveHabit={handleArchiveHabit}
           />

@@ -21,7 +21,7 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
     const handler = setTimeout(() => {
       console.log('Autosaving:', title);
       saveTitle();
-    }, 1000);
+    }, 500);
 
     return () => {
       clearTimeout(handler);
@@ -68,8 +68,8 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
 
   const handleAddMaterial = () => {
     const newItem = {
-      title: 'Title',
-      description: 'Description',
+      title: 'material title',
+      description: 'description',
       id: generateUniqueID(),
     };
     const tempMaterials = [...materials];
@@ -99,9 +99,14 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
         <input
           className="w-full text-[24px] font-bold p-[8px]"
           type="text"
-          value={title}
+          placeholder={title}
+          value={title === 'habit title' ? '' : title}
           onChange={(e) => {
-            if (e.target.value.length <= 20) setTitle(e.target.value);
+            const currTitle = e.target.value;
+            let newTitle = currTitle;
+            if (currTitle.length <= 20) newTitle = currTitle;
+            if (currTitle.length === 0) newTitle = 'habit title';
+            setTitle(newTitle);
           }}
         />
         <StyledButton
@@ -109,10 +114,10 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
           content="archive"
         />
       </div>
-      {materials.map((material, index) => (
+      {materials.map((material) => (
         <MaterialEditor
           material={material}
-          key={index}
+          key={material.id}
           handleSave={handleSave}
           handleArchiveMaterial={handleArchiveMaterial}
         />

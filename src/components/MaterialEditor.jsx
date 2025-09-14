@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { StyledButton } from './StyledButton';
 
 export const MaterialEditor = ({
   material,
@@ -21,27 +22,31 @@ export const MaterialEditor = ({
         <input
           className="w-full p-[8px] text-[20px]"
           type="text"
-          value={title}
+          value={title === 'material title' ? '' : title}
+          placeholder={title}
           onChange={(e) => {
-            if (e.target.value.length <= 20) setTitle(e.target.value);
+            const currTitle = e.target.value;
+            if (currTitle.length <= 20) setTitle(currTitle);
+            if (currTitle.length === 0) setTitle('material title');
           }}
           onClick={() => setIsExpand(true)}
         />
         {isExpand && (
-          <button
-            className="hover:cursor-pointer hover:brightness-75 px-[16px]"
+          <StyledButton
             onClick={() => handleArchiveMaterial(material.id)}
-          >
-            archive
-          </button>
+            content="archive"
+          />
         )}
       </div>
       {isExpand && (
         <textarea
           className="resize-none h-22 p-[8px] text-[16px] bg-[#404142]"
-          value={description}
+          placeholder="description"
+          value={description === 'description' ? '' : description}
           onChange={(e) => {
-            if (e.target.value.length <= 100) setDescription(e.target.value);
+            const currDesc = e.target.value;
+            if (currDesc.length <= 100) setDescription(currDesc);
+            if (currDesc.length === 0) setDescription('description');
           }}
         />
       )}
