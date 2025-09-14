@@ -9,7 +9,6 @@ const AppContextProvider = ({ children }) => {
   const [claims, setClaims] = useState(null);
   const [shuukanData, setShuukanData] = useState(null);
   const [dates, setDates] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
 
@@ -142,11 +141,6 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
-  // loading for middleware to determine user authorization
-  useEffect(() => {
-    claims ? setIsLoading(false) : setIsLoading(true);
-  }, [claims]);
-
   const loadShuukanData = useCallback(async () => {
     const fetchedData = await fetchAll();
     const stringifyData = JSON.stringify(fetchedData);
@@ -180,7 +174,6 @@ const AppContextProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         claims,
-        isLoading,
         fetchTotals,
         fetchMaterialTotals,
         dates,
