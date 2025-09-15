@@ -3,19 +3,19 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import AppContext from 'src/contexts/AppContextProvider';
 
 function PrivateRoute() {
-  const { claims } = useContext(AppContext);
+  const { shuukanData } = useContext(AppContext);
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (claims) return;
+    if (shuukanData) return;
 
     const timer = setTimeout(() => {
       navigate('/login');
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [claims, navigate]);
+  }, [shuukanData, navigate]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,7 +28,7 @@ function PrivateRoute() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (claims === null) {
+  if (shuukanData === null) {
     return (
       <div>
         <h1>Loading...</h1>

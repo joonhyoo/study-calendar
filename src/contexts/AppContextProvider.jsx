@@ -20,6 +20,7 @@ const AppContextProvider = ({ children }) => {
           id,
           hexCode,
           visible,
+          order,
           habit_material (
             title,
             description,
@@ -143,7 +144,9 @@ const AppContextProvider = ({ children }) => {
 
   const loadShuukanData = useCallback(async () => {
     const fetchedData = await fetchAll();
-    const stringifyData = JSON.stringify(fetchedData);
+    const sortedData = fetchedData.sort((a, b) => a.order - b.order);
+    const stringifyData = JSON.stringify(sortedData);
+
     const sessionData = sessionStorage.getItem('shuukan-data');
     if (sessionData !== null && stringifyData === sessionData) {
       console.log('data same');
@@ -181,6 +184,7 @@ const AppContextProvider = ({ children }) => {
         signOut,
         shuukanData,
         loadShuukanData,
+        setShuukanData,
       }}
     >
       <div ref={appRef} className="max-w-[430px] m-auto px-[32px] py-[64px]">

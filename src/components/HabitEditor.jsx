@@ -97,9 +97,9 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
     <div className="flex flex-col gap-[16px] p-[16px] bg-[#212121]">
       <div className="flex">
         <input
-          className="w-full text-[24px] font-bold p-[8px]"
+          className="w-full text-[20px] font-bold"
           type="text"
-          placeholder={title}
+          placeholder={'habit title'}
           value={title === 'habit title' ? '' : title}
           onChange={(e) => {
             const currTitle = e.target.value;

@@ -8,7 +8,6 @@ import supabase from 'src/utils/supabase';
 function HabitSettings() {
   const { shuukanData } = useContext(AppContext);
   const [tempHabits, setTempHabits] = useState([]);
-
   const navigate = useNavigate();
 
   useEffect(() => {

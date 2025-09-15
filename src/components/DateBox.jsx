@@ -3,7 +3,6 @@ import HabitContext from 'src/contexts/HabitContextProvider';
 
 function DateBox({ ratio }) {
   const { habit } = useContext(HabitContext);
-
   return (
     <div
       className="size-[12px] rounded-[3px]"

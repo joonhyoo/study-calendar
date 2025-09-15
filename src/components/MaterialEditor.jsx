@@ -18,9 +18,9 @@ export const MaterialEditor = ({
 
   return (
     <div className="flex flex-col gap-[16px] p-[16px] bg-[#323334]">
-      <div className="flex">
+      <div className="flex justify-between">
         <input
-          className="w-full p-[8px] text-[20px]"
+          className="w-fit text-[16px] font-bold"
           type="text"
           value={title === 'material title' ? '' : title}
           placeholder={title}
