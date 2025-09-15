@@ -2,10 +2,20 @@ import { useEffect, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
 import { StyledButton } from './StyledButton';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
   const [materials, setMaterials] = useState([]); // immutable, won't change.
   const [title, setTitle] = useState(habit.title); // this one changes
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: habit.id });
+
+  const style = {
+    transition: transition,
+    transform: CSS.Transform.toString(transform),
+  };
 
   // useEffect autosaves Habit Title only
   useEffect(() => {
@@ -94,7 +104,11 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
   };
 
   return (
-    <div className="flex flex-col gap-[16px] p-[16px] bg-[#212121]">
+    <div
+      className="flex flex-col gap-[16px] p-[16px] bg-[#212121]"
+      ref={setNodeRef}
+      style={style}
+    >
       <div className="flex">
         <input
           className="w-full text-[24px] font-bold p-[8px]"
@@ -109,6 +123,13 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
             setTitle(newTitle);
           }}
         />
+        <div
+          {...attributes}
+          {...listeners}
+          className="touch-none cursor-grab active:cursor-grabbing"
+        >
+          handle
+        </div>
         <StyledButton
           onClick={() => handleArchiveHabit(habit.id)}
           content="archive"

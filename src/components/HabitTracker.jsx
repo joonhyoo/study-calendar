@@ -6,9 +6,11 @@ import { findMaxObj, getLocalToday } from 'src/utils/helpers';
 
 export default function HabitTracker({ todayTotal }) {
   const [max, setMax] = useState(0);
-  const { ref, dates, shuukanData } = useContext(AppContext);
   const { habit } = useContext(HabitContext);
+  const { dates, shuukanData } = useContext(AppContext);
   const [localTotals, setLocalTotals] = useState({});
+  const [title, setTitle] = useState('');
+  const [hexCode, setHexCode] = useState('');
   const localToday = getLocalToday();
 
   // records: {created_on, count}
@@ -18,6 +20,8 @@ export default function HabitTracker({ todayTotal }) {
     if (!shuukanData) return;
     const createRecords = () => {
       const shuukan = shuukanData.find((shuukan) => shuukan.id === habit.id);
+      setTitle(shuukan.title);
+      setHexCode(shuukan.hexCode);
       const materials = shuukan.habit_material;
       const rec = {};
       Object.keys(materials)
@@ -42,13 +46,11 @@ export default function HabitTracker({ todayTotal }) {
   }, [dates, habit.id, localToday, shuukanData, todayTotal]);
 
   return (
-    <div className="bg-[#323334] flex flex-col gap-[24px] p-[24px]" ref={ref}>
-      {habit && (
-        <div className="flex justify-between">
-          <h2 className="font-bold text-[20px]">{habit.title}</h2>
-        </div>
-      )}
-      <TrackingCalendar totals={localTotals} max={max} />
+    <div className="bg-[#323334] flex flex-col gap-[24px] p-[24px]">
+      <div className="flex justify-between">
+        <h2 className="font-bold text-[20px]">{title}</h2>
+      </div>
+      <TrackingCalendar totals={localTotals} max={max} hexCode={hexCode} />
     </div>
   );
 }

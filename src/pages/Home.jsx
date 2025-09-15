@@ -30,21 +30,21 @@ export default function Home() {
         onClick={() => navigate('/settings')}
         content={'Settings'}
       />
+
       <div className="flex flex-col gap-8">
-        {shuukanData &&
-          shuukanData
-            .filter((habit) => habit.visible)
-            .map((habit, index) => (
-              <div
-                key={index}
-                className="hover:brightness-75 cursor-pointer"
-                onClick={() => navigate('/habit?habit_id=' + habit.id)}
-              >
-                <HabitContextProvider habit={habit}>
-                  <HabitTracker />
-                </HabitContextProvider>
-              </div>
-            ))}
+        {shuukanData
+          .filter((shuukan) => shuukan.visible)
+          .map((habit) => (
+            <div
+              key={habit.id}
+              className="hover:brightness-75 cursor-pointer"
+              onClick={() => navigate('/habit?habit_id=' + habit.id)}
+            >
+              <HabitContextProvider habit={habit} key={habit.id}>
+                <HabitTracker />
+              </HabitContextProvider>
+            </div>
+          ))}
       </div>
     </div>
   );
