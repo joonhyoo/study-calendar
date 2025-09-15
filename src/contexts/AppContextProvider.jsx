@@ -184,6 +184,7 @@ const AppContextProvider = ({ children }) => {
         signOut,
         shuukanData,
         loadShuukanData,
+        setShuukanData,
       }}
     >
       <div ref={appRef} className="max-w-[430px] m-auto px-[32px] py-[64px]">

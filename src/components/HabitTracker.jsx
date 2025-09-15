@@ -3,6 +3,8 @@ import AppContext from 'src/contexts/AppContextProvider';
 import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from './TrackingCalendar';
 import { findMaxObj, getLocalToday } from 'src/utils/helpers';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 export default function HabitTracker({ todayTotal }) {
   const [max, setMax] = useState(0);
@@ -12,6 +14,13 @@ export default function HabitTracker({ todayTotal }) {
   const [title, setTitle] = useState('');
   const [hexCode, setHexCode] = useState('');
   const localToday = getLocalToday();
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: habit.id });
+
+  const style = {
+    transition: transition,
+    transform: CSS.Translate.toString(transform),
+  };
 
   // records: {created_on, count}
   // when page resize, or records change
@@ -46,9 +55,20 @@ export default function HabitTracker({ todayTotal }) {
   }, [dates, habit.id, localToday, shuukanData, todayTotal]);
 
   return (
-    <div className="bg-[#323334] flex flex-col gap-[24px] p-[24px]">
+    <div
+      className="bg-[#323334] flex flex-col gap-[24px] p-[24px]"
+      ref={setNodeRef}
+      style={style}
+    >
       <div className="flex justify-between">
         <h2 className="font-bold text-[20px]">{title}</h2>
+        <div
+          {...attributes}
+          {...listeners}
+          className="touch-none cursor-grab active:cursor-grabbing"
+        >
+          ✢
+        </div>
       </div>
       <TrackingCalendar totals={localTotals} max={max} hexCode={hexCode} />
     </div>
