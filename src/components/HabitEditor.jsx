@@ -14,7 +14,7 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
 
   const style = {
     transition: transition,
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
   };
 
   // useEffect autosaves Habit Title only
@@ -111,9 +111,9 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
     >
       <div className="flex">
         <input
-          className="w-full text-[24px] font-bold p-[8px]"
+          className="w-full text-[20px] font-bold p-[8px]"
           type="text"
-          placeholder={title}
+          placeholder={'habit title'}
           value={title === 'habit title' ? '' : title}
           onChange={(e) => {
             const currTitle = e.target.value;
