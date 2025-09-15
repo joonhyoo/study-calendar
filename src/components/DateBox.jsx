@@ -8,7 +8,7 @@ function DateBox({ ratio }) {
       className="size-[12px] rounded-[3px]"
       style={{
         opacity: ratio === 0 ? 1 : ratio,
-        backgroundColor: ratio === 0 ? '#3A3A3A' : habit.hexCode,
+        backgroundColor: ratio === 0 ? '#3f3f3f' : habit.hexCode,
       }}
     />
   );
