@@ -120,6 +120,22 @@ const AppContextProvider = ({ children }) => {
     createDates();
   }, [availCols]);
 
+  const signInWithOAuth = async (provider) => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: provider,
+      options: {
+        redirectTo: `${window.location.origin}/home`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+    if (error) {
+      console.error(provider, 'login failed:', error.message);
+    }
+  };
+
   // signs in with Github Oauth, but may implement more in future
   const signInWithGitHub = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -181,6 +197,7 @@ const AppContextProvider = ({ children }) => {
         fetchMaterialTotals,
         dates,
         signInWithGitHub,
+        signInWithOAuth,
         signOut,
         shuukanData,
         loadShuukanData,
