@@ -1,32 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
 import { StyledButton } from './StyledButton';
+import DateBox from './DateBox';
+import { TwitterPicker } from 'react-color';
 
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
   const [materials, setMaterials] = useState([]); // immutable, won't change.
   const [title, setTitle] = useState(habit.title); // this one changes
+  const [hex, setHex] = useState(habit.hexCode);
+  const [showColors, setShowColors] = useState(false);
 
   // useEffect autosaves Habit Title only
   useEffect(() => {
-    const saveTitle = async () => {
+    const saveField = async (field, value) => {
+      console.log('Autosaving:', field, value);
       const { error } = await supabase
         .from('habit')
-        .update({ title: title })
+        .update({ [field]: value })
         .eq('id', habit.id);
       if (error) console.warn(error);
     };
-
-    if (title === habit.title) return;
     const handler = setTimeout(() => {
-      console.log('Autosaving:', title);
-      saveTitle();
+      if (title !== habit.title) saveField('title', title);
+      if (hex !== habit.hexCode) saveField('hexCode', hex);
     }, 500);
 
     return () => {
       clearTimeout(handler);
     };
-  }, [habit, title]);
+  }, [habit, hex, title]);
 
   const handleArchiveMaterial = (materialId) => {
     const tempMaterials = [...materials];
@@ -95,7 +98,32 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
 
   return (
     <div className="flex flex-col gap-[16px] p-[16px] bg-[#212121]">
-      <div className="flex">
+      <div className="flex items-center gap-[16px]">
+        <div className="relative flex items-center">
+          <button
+            className={'hover:cursor-pointer'}
+            onClick={() => setShowColors((prev) => !prev)}
+          >
+            <DateBox ratio={1} hexCode={hex} size={24} />
+          </button>
+          {showColors && (
+            <div className="absolute top-10 -translate-x-2">
+              <TwitterPicker
+                color={hex}
+                colors={[
+                  '#FF7B88', // coral red
+                  '#FFB37B', // peachy orange
+                  '#FFD37B', // golden yellow
+                  '#88E17B', // soft green
+                  '#7BCAFF', // sky blue
+                  '#887BFF', // lavender-blue
+                  '#FF7BE1', // pastel magenta
+                ]}
+                onChange={(color) => setHex(color.hex)}
+              />
+            </div>
+          )}
+        </div>
         <input
           className="w-full text-[20px] font-bold"
           type="text"
