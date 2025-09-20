@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { redirect } from 'react-router-dom';
-import { customDateFormat } from 'src/utils/helpers';
+import { customDateFormat, getLocalToday } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
 
 const AppContext = createContext({});
@@ -11,6 +11,7 @@ const AppContextProvider = ({ children }) => {
   const [dates, setDates] = useState([]);
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
+  const localToday = getLocalToday();
 
   // fetches Habits, Corresponding Materials, and their Records
   const fetchAll = async () => {
@@ -222,6 +223,7 @@ const AppContextProvider = ({ children }) => {
         shuukanData,
         loadShuukanData,
         setShuukanData,
+        localToday,
       }}
     >
       <div ref={appRef} className="max-w-[430px] m-auto px-[32px] py-[64px]">

@@ -2,18 +2,17 @@ import { useContext, useEffect, useState } from 'react';
 import AppContext from 'src/contexts/AppContextProvider';
 import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from './TrackingCalendar';
-import { findMaxObj, getLocalToday } from 'src/utils/helpers';
+import { findMaxObj } from 'src/utils/helpers';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 export default function HabitTracker({ todayTotal }) {
   const [max, setMax] = useState(0);
   const { habit } = useContext(HabitContext);
-  const { dates, shuukanData } = useContext(AppContext);
+  const { dates, shuukanData, localToday } = useContext(AppContext);
   const [localTotals, setLocalTotals] = useState({});
   const [title, setTitle] = useState('');
   const [hexCode, setHexCode] = useState('');
-  const localToday = getLocalToday();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: habit.id });
 

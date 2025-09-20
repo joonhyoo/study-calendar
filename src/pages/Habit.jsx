@@ -5,12 +5,11 @@ import HabitUpdater from 'src/components/HabitUpdater';
 import { StyledButton } from 'src/components/StyledButton';
 import AppContext from 'src/contexts/AppContextProvider';
 import { HabitContextProvider } from 'src/contexts/HabitContextProvider';
-import { getLocalToday } from 'src/utils/helpers';
 import supabase from 'src/utils/supabase';
 
 function Habit() {
   const [curr, setCurr] = useState(null);
-  const { shuukanData } = useContext(AppContext);
+  const { shuukanData, localToday } = useContext(AppContext);
   const [savedCount, setSavedCount] = useState({}); // fixed item => won't change unless saving/upserting new data
   const [todayCounts, setTodaysCounts] = useState({}); // stores all temporary changes that are to be staged
   const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +36,7 @@ function Habit() {
   const updateCount = async (materialId, newCount) => {
     const { error } = await supabase.from('habit_records').upsert({
       material_id: materialId,
-      created_on: getLocalToday(),
+      created_on: localToday,
       count: newCount,
     });
     if (error) console.error(error.message);
@@ -82,13 +81,13 @@ function Habit() {
       ?.habit_material.filter((material) => material.visible)
       .forEach((material) => {
         const todayRecord = material.habit_records.find(
-          (record) => record.created_on === getLocalToday()
+          (record) => record.created_on === localToday
         );
         todayCounts[material.id] = todayRecord?.count || 0;
       });
     setTodaysCounts(todayCounts);
     setSavedCount(todayCounts);
-  }, [habitId, materials, shuukanData]);
+  }, [habitId, localToday, materials, shuukanData]);
 
   return (
     <div>

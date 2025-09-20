@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from 'react';
 import HabitContext from 'src/contexts/HabitContextProvider';
 import { TrackingCalendar } from './TrackingCalendar';
 import AppContext from 'src/contexts/AppContextProvider';
-import { findMaxObj, getLocalToday } from 'src/utils/helpers';
+import { findMaxObj } from 'src/utils/helpers';
 import { StyledButton } from './StyledButton';
 
 function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
-  const { dates, shuukanData } = useContext(AppContext);
+  const { dates, shuukanData, localToday } = useContext(AppContext);
   const { habit } = useContext(HabitContext);
   const [localTotals, setLocalTotals] = useState({});
   const [max, setMax] = useState(0);
@@ -33,12 +33,12 @@ function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
   useEffect(() => {
     const shortDates = dates.slice(-dates.length / 7);
     const shortTotals = shortDates.reduce((res, date) => {
-      res[date] = date === getLocalToday() ? todayCount : records?.[date] || 0;
+      res[date] = date === localToday ? todayCount : records?.[date] || 0;
       return res;
     }, {});
     setLocalTotals(shortTotals);
     setMax(findMaxObj(shortTotals));
-  }, [dates, records, todayCount]);
+  }, [dates, localToday, records, todayCount]);
 
   const handlePlus = () => {
     updateChanges(material.id, todayCount + 1);
