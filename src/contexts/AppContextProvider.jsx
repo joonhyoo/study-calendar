@@ -106,20 +106,22 @@ const AppContextProvider = ({ children }) => {
     return () => resizeObserver.disconnect();
   }, []);
 
-  // generates necessary array of dates in accordance with avail Cols
-  useEffect(() => {
-    const createDates = () => {
-      const tempDates = [];
-      const curr = new Date();
-      const rows = 7;
-      for (let x = 0; x < rows * availCols; x++) {
-        tempDates.unshift(customDateFormat(curr));
-        curr.setDate(curr.getDate() - 1);
-      }
-      setDates(tempDates);
-    };
-    createDates();
+  const createDates = useCallback(() => {
+    const tempDates = [];
+    const curr = new Date();
+    const rows = 7;
+    for (let x = 0; x < rows * availCols; x++) {
+      tempDates.unshift(customDateFormat(curr));
+      curr.setDate(curr.getDate() - 1);
+    }
+    console.log('new dates created');
+    setDates(tempDates);
   }, [availCols]);
+
+  // generates necessary array of dates in accordance with avail Cols + when shuukanData changes
+  useEffect(() => {
+    createDates();
+  }, [createDates]);
 
   const signInWithOAuth = async (provider) => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -196,19 +198,18 @@ const AppContextProvider = ({ children }) => {
     return midnight - now;
   };
 
-  // on mount set timer => at midnight, force fetch
+  // on mount set timer => at midnight, create new dates, load new set of data
   useEffect(() => {
     const remainingTime = getTimeTillMidnight();
-    console.log(`Time until midnight: ${remainingTime} ms`);
-
     const timer = setTimeout(() => {
+      createDates();
       loadShuukanData();
     }, remainingTime);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [loadShuukanData]);
+  }, [createDates, loadShuukanData]);
 
   return (
     <AppContext.Provider
