@@ -11,7 +11,7 @@ const AppContextProvider = ({ children }) => {
   const [dates, setDates] = useState([]);
   const [availCols, setAvailCols] = useState(0);
   const appRef = useRef(null);
-  const localToday = getLocalToday();
+  const [localToday, setLocalToday] = useState(getLocalToday());
 
   // fetches Habits, Corresponding Materials, and their Records
   const fetchAll = async () => {
@@ -109,6 +109,7 @@ const AppContextProvider = ({ children }) => {
   const createDates = useCallback(() => {
     const tempDates = [];
     const curr = new Date();
+    curr.setDate(curr.getDate());
     const rows = 7;
     for (let x = 0; x < rows * availCols; x++) {
       tempDates.unshift(customDateFormat(curr));
@@ -204,6 +205,7 @@ const AppContextProvider = ({ children }) => {
     const timer = setTimeout(() => {
       createDates();
       loadShuukanData();
+      setLocalToday(getLocalToday());
     }, remainingTime);
 
     return () => {
