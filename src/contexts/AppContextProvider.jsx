@@ -189,6 +189,26 @@ const AppContextProvider = ({ children }) => {
     verifyUser();
   }, [loadShuukanData]);
 
+  const getTimeTillMidnight = () => {
+    const now = new Date();
+    const midnight = new Date().setHours(24, 0, 0, 0);
+    return midnight - now;
+  };
+
+  // on mount set timer => at midnight, force fetch
+  useEffect(() => {
+    const remainingTime = getTimeTillMidnight();
+    console.log(`Time until midnight: ${remainingTime} ms`);
+
+    const timer = setTimeout(() => {
+      loadShuukanData();
+    }, remainingTime);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [loadShuukanData]);
+
   return (
     <AppContext.Provider
       value={{
