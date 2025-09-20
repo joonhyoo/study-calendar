@@ -1,14 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from 'src/utils/supabase';
 import { MaterialEditor } from './MaterialEditor';
 import { StyledButton } from './StyledButton';
 import DateBox from './DateBox';
 import { TwitterPicker } from 'react-color';
 
+const hexColors = [
+  '#FF7B88', // coral red
+  '#FFB37B', // peachy orange
+  '#FFD37B', // golden yellow
+  '#88E17B', // soft green
+  '#7BCAFF', // sky blue
+  '#887BFF', // lavender-blue
+  '#FF7BE1', // pastel magenta
+];
+
 const HabitEditor = ({ habit, handleArchiveHabit }) => {
   const [materials, setMaterials] = useState([]); // immutable, won't change.
   const [title, setTitle] = useState(habit.title); // this one changes
-  const [hex, setHex] = useState(habit.hexCode);
+  const [hex, setHex] = useState(habit.hexCode || hexColors[0]);
   const [showColors, setShowColors] = useState(false);
 
   // useEffect autosaves Habit Title only
@@ -110,15 +120,7 @@ const HabitEditor = ({ habit, handleArchiveHabit }) => {
             <div className="absolute top-10 -translate-x-2">
               <TwitterPicker
                 color={hex}
-                colors={[
-                  '#FF7B88', // coral red
-                  '#FFB37B', // peachy orange
-                  '#FFD37B', // golden yellow
-                  '#88E17B', // soft green
-                  '#7BCAFF', // sky blue
-                  '#887BFF', // lavender-blue
-                  '#FF7BE1', // pastel magenta
-                ]}
+                colors={hexColors}
                 onChange={(color) => setHex(color.hex)}
               />
             </div>
