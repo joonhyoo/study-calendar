@@ -193,19 +193,17 @@ const AppContextProvider = ({ children }) => {
     verifyUser();
   }, [loadShuukanData]);
 
-  const getTimeTillMidnight = () => {
-    const now = new Date();
-    const midnight = new Date().setHours(24, 0, 0, 0);
-    return midnight - now;
-  };
-
   // on mount set timer => at midnight, create new dates, load new set of data
   useEffect(() => {
-    const remainingTime = getTimeTillMidnight();
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    const remainingTime = midnight - now;
     const timer = setTimeout(() => {
       createDates();
       loadShuukanData();
-      setLocalToday(getLocalToday());
+      // sets date to the tmr date we got from prev calc
+      setLocalToday(customDateFormat(midnight));
     }, remainingTime);
 
     return () => {
