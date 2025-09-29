@@ -1,44 +1,29 @@
-# 🧠 Habit Tracker
+# Shuukan Habit Tracker
 
-A minimalist and visually intuitive habit tracking app to help people build and maintain routines.
-Track your progress, add specific materials to each habit, and visualize your consistency over time.
+A visually pleasing and simple to use habit tracker. Supporting people to take the baby steps required to snowball into success.
 
-## ✨ Features
+## Demo
 
-- 📊 **Visual habit grid**: View daily/weekly consistency using a Github contribution-style grid.
-- 📁 **Category-based tracking**: Group habits under titles like “Fitness” or “Coding”.
-- 🧩 **Custom materials**: Add specific tasks (e.g., Daily walk, Leetcode question) to each habit.
-- 📈 **Progress breakdown**: See how many sub-tasks you've completed for each habit.
-- 🕹️ **User-friendly interface**: Clean and dark-themed UI for focused usability.
-- 🔒 **Authentication**: Profile management with sign-in and sign-out using SupaBase Auth.
+<img src="./screenshots/demo.gif" width="500">
 
-## 📸 Screenshots
+## Features
 
-### Dashboard
+- Reactive grids on update
+- Title habits i.e. "Fitness" and "Coding"
+- Add specific tasks to each habit i.e. "Leetcode Question",
+- Mobile-Friendly
 
-<img src="./screenshots/dashboard.png" alt="dashboard" width="300">
+## Acknowledgements
 
-### Expanded Habit View with Subtasks
+> The grid like structure of the trackers was heavily inspired by Github's contribution tables
 
-<img src="./screenshots/habit-detail-view-page.png" alt="habit-detail-view-page" width="300">
+## Tech Stack
 
----
+Front-End: `React` + `TailwindCSS`\
+Back-end: `Supabase`\
+Hosted on: `Vercel`
 
-## 🛠️ Tech Stack
+## License
 
-The tech used in this project is: `React` on the front-end and hosted on `Vercel` with `Supabase` for authentication and database management.
-
----
-
-## 🧩 Future Improvements
-
-- <img src="https://www.svgrepo.com/show/354478/typescript-icon.svg" alt="habit-detail-view-page" width="16"> TypeScript Support
-- 💡 Smoother UX
-- 📈 Analytics and habit trends
-- 🎯 Habit goals and streak challenges
-
----
-
-## 📄 License
-
-This project free to use, and is licensed under the [MIT License](./LICENSE). The UI was inspired by Github's contribution graphs.
+This project is free to use and licensed under the
+[MIT license](https://choosealicense.com/licenses/mit/)
