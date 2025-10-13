@@ -31,7 +31,6 @@ function PrivateRoute() {
   if (shuukanData === null) {
     return (
       <div>
-        <h1>Loading...</h1>
         {message}
       </div>
     );
