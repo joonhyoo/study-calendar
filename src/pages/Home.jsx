@@ -88,15 +88,10 @@ export default function Home() {
     <div className="flex flex-col ">
       <h1 className="text-[40px] font-bold">Habit Tracker</h1>
       <StyledButton
-        content={'Go to Profile'}
-        onClick={() => navigate('/profile')}
+        onClick={() => navigate('/settings')}
+        content={'Edit Habits'}
       />
       <StyledButton onClick={handleSignOut} content={'Sign Out'} />
-      <StyledButton
-        onClick={() => navigate('/settings')}
-        content={'Settings'}
-      />
-
       <div className="flex flex-col gap-8">
         <DndContext
           collisionDetection={closestCorners}
