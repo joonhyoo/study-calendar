@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import HabitEditor from 'src/components/HabitEditor';
-import { StyledButton } from 'src/components/StyledButton';
-import AppContext from 'src/contexts/AppContextProvider';
-import supabase from 'src/utils/supabase';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import HabitEditor from "src/components/HabitEditor";
+import { StyledButton } from "src/components/StyledButton";
+import AppContext from "src/contexts/AppContextProvider";
+import supabase from "src/utils/supabase";
 
 function HabitSettings() {
   const { shuukanData } = useContext(AppContext);
@@ -31,15 +31,15 @@ function HabitSettings() {
 
   const archiveHabit = async (habitId) => {
     const { error } = await supabase
-      .from('habit')
+      .from("habit")
       .update({ visible: false })
-      .eq('id', habitId);
+      .eq("id", habitId);
     if (error) console.error(error.message);
   };
 
   const insertHabit = async ({ title, id, hexCode }) => {
     const { error } = await supabase
-      .from('habit')
+      .from("habit")
       .insert({ title: title, hexCode: hexCode, id: id });
     if (error) console.error(error.message);
   };
@@ -47,7 +47,7 @@ function HabitSettings() {
   const handleAddHabit = () => {
     const id = generateUniqueID();
     const temp = [...tempHabits];
-    const newHabit = { title: 'habit title', id: id, habit_material: [] };
+    const newHabit = { title: "habit title", id: id, habit_material: [] };
     temp.push(newHabit);
     insertHabit(newHabit);
     setTempHabits(temp);
@@ -56,7 +56,7 @@ function HabitSettings() {
   return (
     <div className="flex flex-col gap-[48px]">
       <a
-        onClick={() => navigate('/home')}
+        onClick={() => navigate("/home")}
         className="hover:cursor-pointer hover:brightness-75"
       >
         <h1 className="text-[40px] font-bold">◂ home</h1>
