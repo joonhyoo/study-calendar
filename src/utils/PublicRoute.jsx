@@ -2,23 +2,22 @@ import { useEffect } from "react";
 import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "src/stores/authStore";
 
-function PrivateRoute() {
+function PublicRoute() {
   const navigate = useNavigate();
   const { user, verifyUser, isLoading } = useAuthStore();
 
   useEffect(() => {
     const checkAuth = async () => {
       const currentUser = user ?? (await verifyUser());
-      if (!currentUser) {
-        navigate("/login");
+      if (currentUser) {
+        navigate("/");
       }
     };
     checkAuth();
   }, [user, navigate, verifyUser]);
 
-  if (isLoading || !user) return <p>Loading...</p>; // or a spinner
+  if (isLoading) return <p>Loading...</p>; // or a spinner
 
-  return user ? <Outlet /> : <Navigate to="/login" replace />;
+  return user ? <Navigate to="/home" replace /> : <Outlet />;
 }
-
-export default PrivateRoute;
+export default PublicRoute;

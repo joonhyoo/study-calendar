@@ -5,6 +5,7 @@ export const StyledButton = ({ onClick, content }) => {
 		<button
 			className="hover:cursor-pointer hover:brightness-75 px-[16px]"
 			onClick={onClick}
+			type="button"
 		>
 			{content}
 		</button>

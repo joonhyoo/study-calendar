@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import AppContext from "src/contexts/AppContextProvider";
 import HabitContext from "src/contexts/HabitContextProvider";
 import { findMaxObj } from "src/utils/helpers";
+import { HabitRing } from "./HabitRing";
 import { StyledButton } from "./StyledButton";
-import { TrackingCalendar } from "./TrackingCalendar";
 
-function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
+function HabitUpdater({ material, updateChanges, todayCount, goal = 1 }) {
 	const { dates, shuukanData, localToday } = useContext(AppContext);
+	const done = todayCount >= goal;
 	const { habit } = useContext(HabitContext);
 	const [localTotals, setLocalTotals] = useState({});
 	const [max, setMax] = useState(0);
@@ -21,12 +22,12 @@ function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
 			materials
 				.find((m) => m.id === material.id)
 				.habit_records.forEach(
-					(record) => (rec[record.created_on] = record.count),
+					(record) => rec[record.created_on] === record.count,
 				);
 			return rec;
 		};
 		setRecords(createRecords());
-	}, [dates, habit.id, material.id, shuukanData]);
+	}, [habit.id, material.id, shuukanData]);
 
 	// when page resize, or records change
 	// update localTotals and max
@@ -50,23 +51,53 @@ function HabitUpdater({ material, isEditing, updateChanges, todayCount }) {
 
 	return (
 		habit && (
-			<div className="bg-[#323334] flex flex-col gap-[16px] p-[24px]">
-				<h4 className="text-[20px] font-[700]">{material.title}</h4>
-				<TrackingCalendar totals={localTotals} max={max} short />
-				<div className="flex justify-between items-center">
-					<p>Completed:</p>
-					<div
-						className={
-							"flex gap-[4px] p-[4px] w-[86px] justify-center " +
-							(isEditing && "bg-[#ffffff0d]")
-						}
-					>
-						{isEditing && (
-							<StyledButton onClick={handleMinus} content="&minus;" />
-						)}
-						<p className="w-[30px] text-center">{todayCount && todayCount}</p>
-						{isEditing && <StyledButton onClick={handlePlus} content="&#43;" />}
+			<div className="bg-[#323334] flex flex-col gap-[16px] items-center p-[24px]">
+				<div className="relative">
+					<HabitRing
+						count={todayCount}
+						goal={goal}
+						color={habit.hexCode}
+						size={100}
+						stroke={12}
+					/>
+					<div className="absolute inset-0 flex flex-col items-center justify-center">
+						<span
+							className="text-3xl font-[600] ease-in-out duration-250"
+							style={{
+								color: done ? habit.hexCode : "#fff",
+							}}
+						>
+							{todayCount}
+						</span>
+						<span
+							style={{
+								fontFamily: "'DM Mono', monospace",
+								fontSize: 13,
+								color: "rgba(255,255,255,0.35)",
+								letterSpacing: "0.05em",
+							}}
+						>
+							/ {goal}
+						</span>
 					</div>
+				</div>
+
+				<h4 className="text-[20px] font-[700]">{material.title}</h4>
+				<div className={"flex flex-col justify-center"}>
+					<button
+						onClick={handlePlus}
+						type="button"
+						disabled={done}
+						className="rounded-xl px-7 py-3 text-md font-[700] tracking-wider ease duration-250 w-full"
+						style={{
+							background: done ? `${habit.hexCode}22` : habit.hexCode,
+							color: done ? habit.hexCode : "#000",
+							cursor: done ? "default" : "pointer",
+							opacity: done ? 0.6 : 1,
+						}}
+					>
+						{done ? "Done!" : "Log +1"}
+					</button>
 				</div>
 			</div>
 		)
