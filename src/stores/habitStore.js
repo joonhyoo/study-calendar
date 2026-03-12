@@ -53,7 +53,7 @@ export const useHabitStore = create((set, get) => ({
 
   // Update habit count
   updateHabit: async (material_id, newCount) => {
-    // 1️⃣ Update local state immediately (fast)
+    // update zustand stores
     set((state) => ({
       shuukanData: state.shuukanData.map((habit) => ({
         ...habit,
@@ -65,6 +65,7 @@ export const useHabitStore = create((set, get) => ({
       })),
     }));
 
+    // update supabase backend
     try {
       const { error } = await supabase.from("habit_records").upsert({
         material_id,

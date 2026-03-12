@@ -69,8 +69,8 @@ export const HabitRing = ({
               opacity={isPreview ? 0.35 : 1}
               style={{
                 transition: isFilled
-                  ? `stroke-dashoffset 0.45s cubic-bezier(0.22, 1, 0.36, 1) ${i * 30}ms, opacity 0.2s ease`
-                  : `stroke-dashoffset 0.3s ease, opacity 0.2s ease`,
+                  ? `stroke-dashoffset 0.45s cubic-bezier(0.22, 1, 0.36, 1) ${i * 30}ms, opacity 0.3s ease`
+                  : `stroke-dashoffset 0.4s ease, opacity 0.3s ease`,
               }}
             />
           </g>

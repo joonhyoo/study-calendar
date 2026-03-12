@@ -11,7 +11,7 @@ const tabs = Object.freeze([
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8 py-8">
+    <div className="flex flex-col gap-8 py-8 px-4 w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl">
       <Header />
       <nav
         role="tablist"

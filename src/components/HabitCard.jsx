@@ -8,20 +8,22 @@ function HabitCard({ title, id, hexcode, todayCount, goal }) {
   const updateHabit = useHabitStore((state) => state.updateHabit);
 
   return (
-    <div className="bg-[#323334] rounded-2xl flex flex-col gap-[16px] items-center px-4 py-8">
+    <div className="bg-[#323334] rounded-2xl flex flex-col gap-2 sm:gap-4 items-center px-4 py-4 sm:py-8">
       {/* Ring + overlay */}
       <div className="relative">
-        <HabitRing
-          count={todayCount}
-          goal={goal}
-          color={hexcode}
-          size={140}
-          stroke={12}
-          previewCount={isHovering && !done ? todayCount + 1 : todayCount}
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div className="hidden sm:block">
+          <HabitRing
+            count={todayCount}
+            goal={goal}
+            color={hexcode}
+            size={140}
+            stroke={12}
+            previewCount={isHovering && !done ? todayCount + 1 : todayCount}
+          />
+        </div>
+        <div className="block sm:absolute inset-0 flex sm:flex-col items-center justify-center gap-1 sm:gap-0">
           <span
-            className="text-3xl font-[600] ease-in-out duration-250"
+            className="text-4xl font-semibold ease-in-out duration-250"
             style={{
               color: done ? hexcode : "#fff",
               opacity: isHovering ? 0.45 : 1,
@@ -31,11 +33,8 @@ function HabitCard({ title, id, hexcode, todayCount, goal }) {
             {isHovering && !done ? todayCount + 1 : todayCount}
           </span>
           <span
+            className="text-xs text-white opacity-35 tracking-wider"
             style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: 13,
-              color: "rgba(255,255,255,0.35)",
-              letterSpacing: "0.05em",
               opacity: isHovering ? 0.5 : 1,
               transition: "opacity 0.2s ease",
             }}
@@ -46,7 +45,7 @@ function HabitCard({ title, id, hexcode, todayCount, goal }) {
       </div>
 
       {/* Title */}
-      <h4 className="text-[20px] font-[700]">{title}</h4>
+      <h4 className="text-lg sm:text-xl font-bold">{title}</h4>
 
       {/* Button with hover preview using arrow functions */}
       <div className="flex flex-col justify-center w-full">
@@ -60,12 +59,11 @@ function HabitCard({ title, id, hexcode, todayCount, goal }) {
           onMouseLeave={() => setIsHovering(false)}
           type="button"
           disabled={done}
-          className="rounded-xl px-7 py-3 text-md font-[700] tracking-wider ease duration-250 w-full"
+          className="rounded-xl py-2 text-md font-semibold tracking-wider ease duration-250 w-full hover:opacity-70"
           style={{
             background: done ? `${hexcode}22` : hexcode,
             color: done ? hexcode : "#000",
             cursor: done ? "default" : "pointer",
-            opacity: done ? 0.6 : 1,
           }}
         >
           {done ? "Done!" : "Log +1"}

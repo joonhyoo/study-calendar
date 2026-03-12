@@ -21,7 +21,7 @@ import HabitCard from "src/components/HabitCard";
 const Today = () => {
   const shuukanData = useHabitStore((state) => state.shuukanData);
   const fetchLatest = useHabitStore((state) => state.fetchLatest);
-  const isLoading = useHabitStore((state) => state.updateHabit);
+  const isLoading = useHabitStore((state) => state.isLoading);
 
   // Load data on component mount
   useEffect(() => {
@@ -81,7 +81,8 @@ const Today = () => {
   const allMaterials = shuukanData.flatMap((habit) => habit.materials);
   const totalCompleted = allMaterials.reduce((sum, h) => sum + h.count, 0);
   const totalTarget = allMaterials.reduce((sum, h) => sum + h.points, 0);
-  const overallPercentage = Math.round((totalCompleted / totalTarget) * 100);
+  const overallPercentage =
+    totalTarget === 0 ? 0 : Math.round((totalCompleted / totalTarget) * 100);
 
   return (
     <div>
@@ -89,10 +90,10 @@ const Today = () => {
       <div className="bg-[#323334] rounded-2xl p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-sm text-gray-300 uppercase tracking-wide font-semibold mb-1">
+            <p className="text-sm text-left text-gray-300 uppercase tracking-wide font-semibold mb-1">
               Today's Progress
             </p>
-            <p className="text-4xl text-left text-gray-200 font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <p className="text-4xl text-left font-bold text-orange-400">
               {overallPercentage}%
             </p>
           </div>
@@ -104,9 +105,9 @@ const Today = () => {
           </div>
         </div>
         {/* Overall Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div className="w-full bg-[#464748] rounded-full h-3 overflow-hidden">
           <div
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all ease-in-out duration-500 shadow-lg"
+            className="bg-gradient-to-r from-amber-400 to-orange-500 h-3 transition-all ease-in-out duration-500 rounded-full"
             style={{ width: `${overallPercentage}%` }}
           />
         </div>
