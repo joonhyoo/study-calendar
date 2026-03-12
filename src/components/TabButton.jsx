@@ -1,25 +1,23 @@
+// TabButton.jsx
 import { NavLink } from "react-router-dom";
 
-const TabButton = ({ to, label }) => {
-  return (
-    <NavLink
-      to={to}
-      role="tab"
-      aria-selected={({ isActive }) => isActive}
-      tabIndex={0}
-      className={({ isActive }) =>
-        `flex-1 py-2 rounded-xl font-semibold transition-all duration-200 text-center
-         focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2
-         ${
-           isActive
-             ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-600/50"
-             : "bg-white/60 backdrop-blur-sm text-gray-800 hover:bg-white hover:shadow-md"
-         }`
-      }
-    >
-      {label}
-    </NavLink>
-  );
-};
+const TabButton = ({ to, label }) => (
+  <NavLink
+    to={to}
+    role="tab"
+    tabIndex={0}
+    className={({ isActive }) =>
+      `flex-1 py-2 text-center text-xs tracking-[0.18em] uppercase transition-all duration-200
+       focus:outline-none
+       ${
+         isActive
+           ? "text-[#e8e4dc] border-b border-[#c8622a]"
+           : "text-[#5a5a52] border-b border-transparent hover:text-[#e8e4dc]"
+       }`
+    }
+  >
+    {label}
+  </NavLink>
+);
 
 export default TabButton;

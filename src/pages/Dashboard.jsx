@@ -11,18 +11,18 @@ const tabs = Object.freeze([
 
 export default function Dashboard() {
   return (
-    <div className="flex flex-col gap-8 py-8 px-4 w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl">
+    <div className="flex flex-col gap-8 pb-8 w-full items-center">
       <Header />
       <nav
         role="tablist"
-        className="flex justify-center gap-3"
+        className="flex justify-center gap-3 px-4 w-full max-w-4xl"
         aria-label="Habit tracker sections"
       >
         {tabs.map((tab) => (
           <TabButton key={tab.id} to={tab.id} label={tab.label} />
         ))}
       </nav>
-      <main role="tabpanel">
+      <main role="tabpanel" className="w-full max-w-4xl px-4">
         <Outlet />
       </main>
     </div>

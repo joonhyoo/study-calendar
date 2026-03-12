@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import BasicNav from "src/components/BasicNav";
+import Header from "src/components/Header";
 
 const Homepage = () => {
   const [visible, setVisible] = useState(false);
@@ -11,17 +11,17 @@ const Homepage = () => {
 
   return (
     <div className="min-h-screen bg-[#0e0e0d] text-[#e8e4dc] flex flex-col items-center w-full">
-      <BasicNav />
+      <Header isSignIn />
       {/* Hero */}
       <main
-        className={`flex-1 flex flex-col justify-center px-10 py-24 max-w-2xl transition-all duration-700 ease-out ${
+        className={`flex-1 flex flex-col justify-center items-center px-10 py-24 max-w-2xl transition-all duration-700 ease-out ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
       >
         <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#c8622a] mb-7">
           The Habit Tracking App
         </p>
-        <h1 className="text-[clamp(3rem,7vw,5.5rem)] leading-none tracking-tight text-[#e8e4dc] mb-7">
+        <h1 className="font-serif text-[clamp(3rem,7vw,5.5rem)] leading-none tracking-tight text-[#e8e4dc] mb-7">
           Build habits
           <br />
           that <em className="italic text-[#c8622a]">stick.</em>

@@ -13,7 +13,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useHabitStore } from "src/stores/habitStore";
 import supabase from "src/services/supabase";
 import HabitCard from "src/components/HabitCard";
@@ -21,9 +21,7 @@ import HabitCard from "src/components/HabitCard";
 const Today = () => {
   const shuukanData = useHabitStore((state) => state.shuukanData);
   const fetchLatest = useHabitStore((state) => state.fetchLatest);
-  const isLoading = useHabitStore((state) => state.isLoading);
 
-  // Load data on component mount
   useEffect(() => {
     fetchLatest();
   }, [fetchLatest]);
@@ -31,52 +29,46 @@ const Today = () => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
-  const getHabitPosition = (habitId) => {
-    return shuukanData.findIndex((habit) => habit.id === habitId);
-  };
+
+  const getHabitPosition = (habitId) =>
+    shuukanData.findIndex((habit) => habit.id === habitId);
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id === over.id) return;
     const pos1 = getHabitPosition(active.id);
     const pos2 = getHabitPosition(over.id);
-    setShuukanData(() => {
-      return arrayMove(shuukanData, pos1, pos2);
-    });
-    // swap the order of these two
+    setShuukanData(() => arrayMove(shuukanData, pos1, pos2));
     handleSwapOrder(active.id, over.id);
   };
 
   const handleSwapOrder = async (id1, id2) => {
-    // gets original positions
-    const original = [
-      supabase.from("habit").select("order").eq("id", id1),
-      supabase.from("habit").select("order").eq("id", id2),
-    ];
     const [{ data: pos1, error: fetchError1 }, { data: pos2, fetchError2 }] =
-      await Promise.all(original);
-
+      await Promise.all([
+        supabase.from("habit").select("order").eq("id", id1),
+        supabase.from("habit").select("order").eq("id", id2),
+      ]);
     if (fetchError1) console.warn(fetchError1.message);
     if (fetchError2) console.warn(fetchError2.message);
-
-    // swaps them
-    const updates = [
-      supabase.from("habit").update({ order: pos2[0].order }).eq("id", id1),
-      supabase.from("habit").update({ order: pos1[0].order }).eq("id", id2),
-    ];
-
     const [{ error: updateError1 }, { error: updateError2 }] =
-      await Promise.all(updates);
-
+      await Promise.all([
+        supabase.from("habit").update({ order: pos2[0].order }).eq("id", id1),
+        supabase.from("habit").update({ order: pos1[0].order }).eq("id", id2),
+      ]);
     if (updateError1) console.warn(updateError1.message);
     if (updateError2) console.warn(updateError2.message);
   };
-  // temporary
-  if (!shuukanData) return <div>Loading...</div>;
+
+  if (!shuukanData)
+    return (
+      <div className="min-h-screen bg-[#0e0e0d] flex items-center justify-center">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#5a5a52]">
+          Loading...
+        </p>
+      </div>
+    );
 
   const allMaterials = shuukanData.flatMap((habit) => habit.materials);
   const totalCompleted = allMaterials.reduce((sum, h) => sum + h.count, 0);
@@ -84,36 +76,58 @@ const Today = () => {
   const overallPercentage =
     totalTarget === 0 ? 0 : Math.round((totalCompleted / totalTarget) * 100);
 
+  // Today's date label
+  const today = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
-    <div>
-      {/* Progress Overview Card from Figma Make*/}
-      <div className="bg-[#2a2b2c] rounded-2xl p-6 mb-8">
-        <div className="flex items-center justify-between mb-4">
+    <div className="min-h-screen bg-[#0e0e0d] py-10 px-6 mx-auto w-full">
+      {/* Page header */}
+      <div className="mb-10">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#c8622a] mb-2">
+          {today}
+        </p>
+        <h1 className="font-serif text-4xl tracking-tight text-[#e8e4dc] leading-none">
+          Today's <em className="italic text-[#c8622a]">habits.</em>
+        </h1>
+      </div>
+
+      {/* Progress card */}
+      <div className="border border-[#232320] p-6 mb-10">
+        <div className="flex items-end justify-between mb-5">
           <div>
-            <p className="text-sm text-left text-gray-300 uppercase tracking-wide font-semibold mb-1">
-              Today's Progress
+            <p className="text-[0.6rem] tracking-[0.18em] uppercase text-[#5a5a52] mb-2">
+              Overall Progress
             </p>
-            <p className="text-4xl text-left font-bold text-orange-400">
+            <p className="font-serif text-5xl leading-none text-[#c8622a] italic">
               {overallPercentage}%
             </p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold">
-              {totalCompleted}/{totalTarget}
+            <p className="text-[#e8e4dc] text-2xl font-light tracking-tight">
+              {totalCompleted}
+              <span className="text-[#5a5a52]">/{totalTarget}</span>
             </p>
-            <p className="text-sm text-gray-300">tasks completed</p>
+            <p className="text-[0.65rem] tracking-widest uppercase text-[#5a5a52] mt-1">
+              tasks done
+            </p>
           </div>
         </div>
-        {/* Overall Progress Bar */}
-        <div className="w-full bg-[#464748] rounded-full h-3 overflow-hidden">
+
+        {/* Progress bar */}
+        <div className="w-full bg-[#1a1a18] h-[2px]">
           <div
-            className="bg-gradient-to-r from-amber-400 to-orange-500 h-3 transition-all ease-in-out duration-500 rounded-full"
+            className="bg-[#c8622a] h-[2px] transition-all duration-500 ease-in-out"
             style={{ width: `${overallPercentage}%` }}
           />
         </div>
       </div>
 
-      <div className="flex flex-col gap-8">
+      {/* Habit sections */}
+      <div className="flex flex-col gap-6">
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={handleDragEnd}
@@ -124,30 +138,30 @@ const Today = () => {
             strategy={verticalListSortingStrategy}
           >
             {shuukanData.map((habit) => (
-              <section
-                key={habit.id}
-                className="bg-[#2a2b2c] border border-white/5 rounded-2xl p-6"
-              >
-                {/* Section Header */}
-                <h2 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-5 flex items-center gap-3">
+              <section key={habit.id} className="border border-[#232320]">
+                {/* Section header */}
+                <div className="flex items-center gap-3 px-5 py-4 border-b border-[#232320]">
                   <span
-                    className="w-1 h-4 rounded-full"
-                    style={{ backgroundColor: habit.hexcode || "#6366f1" }}
-                  ></span>
-                  {habit.title}
-                </h2>
+                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: habit.hexcode || "#c8622a" }}
+                  />
+                  <h2 className="text-[0.65rem] tracking-[0.18em] uppercase text-[#5a5a52]">
+                    {habit.title}
+                  </h2>
+                </div>
 
-                {/* Habit Cards Grid */}
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {/* Cards grid */}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#232320]">
                   {habit.materials.map((material) => (
-                    <HabitCard
-                      key={material.material_id}
-                      title={material.material_title}
-                      id={material.material_id}
-                      todayCount={material.count}
-                      goal={material.points}
-                      hexcode={material.hexcode}
-                    />
+                    <div key={material.material_id} className="bg-[#0e0e0d]">
+                      <HabitCard
+                        title={material.material_title}
+                        id={material.material_id}
+                        todayCount={material.count}
+                        goal={material.points}
+                        hexcode={material.hexcode}
+                      />
+                    </div>
                   ))}
                 </div>
               </section>
@@ -158,4 +172,5 @@ const Today = () => {
     </div>
   );
 };
+
 export default Today;
