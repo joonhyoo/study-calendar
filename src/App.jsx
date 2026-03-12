@@ -8,8 +8,15 @@ import HabitSettings from "./pages/HabitSettings";
 import Login from "./pages/Login";
 import PrivateRoute from "./utils/PrivateRoute";
 import PublicRoute from "./utils/PublicRoute.jsx";
+import { useAuthStore } from "src/stores/authStore";
 
 function App() {
+  const initAuth = useAuthStore((s) => s.initAuth);
+
+  useEffect(() => {
+    const unsubscribe = initAuth();
+    return unsubscribe; // cleanup on unmount
+  }, []);
   return (
     <Routes>
       <Route element={<PublicRoute />}>

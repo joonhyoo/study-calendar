@@ -1,23 +1,9 @@
-import { useEffect } from "react";
-import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { useAuthStore } from "src/stores/authStore";
+import { Navigate, Outlet } from "react-router-dom";
 
-function PublicRoute() {
-  const navigate = useNavigate();
-  const { user, verifyUser, isLoading } = useAuthStore();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const currentUser = user ?? (await verifyUser());
-      if (currentUser) {
-        navigate("/");
-      }
-    };
-    checkAuth();
-  }, [user, navigate, verifyUser]);
-
-  if (isLoading) return <p>Loading...</p>; // or a spinner
-
-  return user ? <Navigate to="/home" replace /> : <Outlet />;
+// PublicRoute.jsx
+export default function PublicRoute() {
+  const { user, isLoading } = useAuthStore();
+  if (isLoading) return null;
+  return !user ? <Outlet /> : <Navigate to="/today" replace />;
 }
-export default PublicRoute;
