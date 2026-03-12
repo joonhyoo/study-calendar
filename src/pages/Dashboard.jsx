@@ -9,7 +9,7 @@ const tabs = Object.freeze([
   { id: "manage", label: "Manage" },
 ]);
 
-export default function Home() {
+export default function Dashboard() {
   return (
     <div className="flex flex-col gap-8 py-8 px-4 w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl">
       <Header />

@@ -5,5 +5,5 @@ import { Navigate, Outlet } from "react-router-dom";
 export default function PublicRoute() {
   const { user, isLoading } = useAuthStore();
   if (isLoading) return null;
-  return !user ? <Outlet /> : <Navigate to="/today" replace />;
+  return !user ? <Outlet /> : <Navigate to="/dashboard" replace />;
 }

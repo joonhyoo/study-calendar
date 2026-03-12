@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { useAuthStore } from "src/stores/authStore";
+import BasicNav from "src/components/BasicNav";
 
 const AuthButton = ({ provider, logoSrc, onClick }) => (
   <button
-    className="hover:cursor-pointer hover:brightness-75 flex gap-4 justify-center items-center py-2 px-4 bg-[#323334] rounded-md"
     type="button"
     onClick={onClick}
+    className="flex items-center justify-center gap-3 w-full py-3 px-5 bg-transparent border border-[#232320] text-[#5a5a52] text-[0.72rem] tracking-widest uppercase hover:border-[#c8622a] hover:text-[#e8e4dc] transition-all cursor-pointer"
   >
-    Sign in with {provider}
     <img className="w-4 h-4" alt={`${provider} logo`} src={logoSrc} />
+    Sign in with {provider}
   </button>
 );
 
@@ -21,23 +21,44 @@ export default function Login() {
   ];
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="bg-[#2b2b2b] rounded-xl shadow-xl p-8 w-full max-w-md text-center">
-        <h1 className="text-4xl font-bold text-white">Habit Tracker</h1>
-        <p className="text-gray-300 mt-2 mb-6">Sign in to continue</p>
+    <div className="min-h-screen bg-[#0e0e0d] flex items-center justify-center px-4 w-full">
+      <BasicNav />
+      <div className="w-full max-w-sm">
+        {/* Header */}
+        <div className="mb-10">
+          <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#c8622a] mb-3">
+            Habit Tracking
+          </p>
+          <h1 className="font-serif text-4xl tracking-tight text-[#e8e4dc] leading-none mb-2">
+            Shu<em className="italic text-[#c8622a]">u</em>
+          </h1>
+          <p className="text-[0.75rem] text-[#5a5a52] tracking-wide">
+            Sign in to continue
+          </p>
+        </div>
 
-        <div className="flex flex-col gap-4">
+        {/* Buttons */}
+        <div className="flex flex-col gap-3">
           {providers.map((p) => (
             <AuthButton
               key={p.name}
               provider={p.name}
               logoSrc={p.logo}
-              onClick={() => signInWithProvider(p.name)}
-            >
-              {p.name}
-            </AuthButton>
+              onClick={() => signInWithProvider(p.name.toLowerCase())}
+            />
           ))}
         </div>
+
+        {/* Footer */}
+        <p className="mt-10 text-[0.6rem] tracking-wider text-[#3a3a38] text-center">
+          By signing in you agree to our{" "}
+          <a
+            href="/privacy-policy"
+            className="text-[#5a5a52] hover:text-[#c8622a] transition-colors no-underline"
+          >
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </div>
   );

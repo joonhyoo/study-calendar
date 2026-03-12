@@ -1,13 +1,14 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
-import Habit from "src/pages/Habit";
-import Home from "src/pages/Home";
+import Dashboard from "src/pages/Dashboard";
 import Profile from "src/pages/Profile";
 import Today from "src/pages/Today";
-import HabitSettings from "./pages/HabitSettings";
-import Login from "./pages/Login";
-import PrivateRoute from "./utils/PrivateRoute";
-import PublicRoute from "./utils/PublicRoute.jsx";
+import HabitSettings from "src/pages/HabitSettings";
+import Login from "src/pages/Login";
+import PrivateRoute from "src/utils/PrivateRoute";
+import PublicRoute from "src/utils/PublicRoute";
+import Homepage from "src/pages/Homepage";
+import PrivacyPolicy from "src/pages/PrivacyPolicy";
 import { useAuthStore } from "src/stores/authStore";
 
 function App() {
@@ -19,12 +20,14 @@ function App() {
   }, []);
   return (
     <Routes>
+      <Route path="/" element={<Homepage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Route>
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Home />}>
+        <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Navigate to="today" replace />} />
           <Route path="profile" element={<Profile />} />
           <Route path="today" element={<Today />} />
