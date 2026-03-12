@@ -78,8 +78,9 @@ const Today = () => {
   // temporary
   if (!shuukanData) return <div>Loading...</div>;
 
-  const totalCompleted = shuukanData.reduce((sum, h) => sum + h.count, 0);
-  const totalTarget = shuukanData.reduce((sum, h) => sum + h.points, 0);
+  const allMaterials = shuukanData.flatMap((habit) => habit.materials);
+  const totalCompleted = allMaterials.reduce((sum, h) => sum + h.count, 0);
+  const totalTarget = allMaterials.reduce((sum, h) => sum + h.points, 0);
   const overallPercentage = Math.round((totalCompleted / totalTarget) * 100);
 
   return (
@@ -111,7 +112,7 @@ const Today = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-8">
+      <div className="flex flex-col gap-8">
         <DndContext
           collisionDetection={closestCorners}
           onDragEnd={handleDragEnd}
@@ -122,14 +123,33 @@ const Today = () => {
             strategy={verticalListSortingStrategy}
           >
             {shuukanData.map((habit) => (
-              <HabitCard
-                title={habit.material_title}
-                key={habit.material_id}
-                id={habit.material_id}
-                todayCount={habit.count}
-                goal={habit.points}
-                hexcode={habit.hexcode}
-              />
+              <section
+                key={habit.id}
+                className="bg-[#2a2b2c] border border-white/5 rounded-2xl p-6 mb-4"
+              >
+                {/* Section Header */}
+                <h2 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-5 flex items-center gap-3">
+                  <span
+                    className="w-1 h-4 rounded-full"
+                    style={{ backgroundColor: habit.hexcode || "#6366f1" }}
+                  ></span>
+                  {habit.title}
+                </h2>
+
+                {/* Habit Cards Grid */}
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {habit.materials.map((material) => (
+                    <HabitCard
+                      key={material.material_id}
+                      title={material.material_title}
+                      id={material.material_id}
+                      todayCount={material.count}
+                      goal={material.points}
+                      hexcode={material.hexcode}
+                    />
+                  ))}
+                </div>
+              </section>
             ))}
           </SortableContext>
         </DndContext>

@@ -1,42 +1,43 @@
-import { useContext, useEffect } from "react";
-import { StyledButton } from "src/components/StyledButton";
-import AppContext from "src/contexts/AppContextProvider";
+import { useState } from "react";
 import { useAuthStore } from "src/stores/authStore";
 
+const AuthButton = ({ provider, logoSrc, onClick }) => (
+  <button
+    className="hover:cursor-pointer hover:brightness-75 flex gap-4 justify-center items-center py-2 px-4 bg-[#323334] rounded-md"
+    type="button"
+    onClick={onClick}
+  >
+    Sign in with {provider}
+    <img className="w-4 h-4" alt={`${provider} logo`} src={logoSrc} />
+  </button>
+);
+
 export default function Login() {
-  const { signInWithProvider } = useAuthStore();
+  const signInWithProvider = useAuthStore((state) => state.signInWithProvider);
+
+  const providers = [
+    { name: "Google", logo: "/google-logo.png" },
+    { name: "GitHub", logo: "/white-github-logo.png" },
+  ];
 
   return (
-    <div className="bg-[#212121] flex flex-col justify-center p-[24px] gap-[32px]">
-      <div>
-        <h1 className="text-[40px] font-bold w-full">Habit Tracker</h1>
-        <p>sign in to continue</p>
-      </div>
-      <div className="flex flex-col gap-[16px]">
-        <button
-          className="hover:cursor-pointer hover:brightness-75 flex gap-4 justify-center items-center py-[8px] bg-[#323334]"
-          type="button"
-          onClick={() => signInWithProvider("Google")}
-        >
-          Sign in with Google
-          <img
-            className="size-[16px]"
-            alt="Google logo"
-            src="/google-logo.png"
-          />
-        </button>
-        <button
-          className="hover:cursor-pointer hover:brightness-75 flex gap-4 justify-center items-center py-[8px] bg-[#323334]"
-          type="button"
-          onClick={() => signInWithProvider("GitHub")}
-        >
-          Sign in with GitHub
-          <img
-            className="size-[16px]"
-            alt="GitHub logo"
-            src="/white-github-logo.png"
-          />
-        </button>
+    <div className="flex items-center justify-center min-h-screen px-4">
+      <div className="bg-[#2b2b2b] rounded-xl shadow-xl p-8 w-full max-w-md text-center">
+        <h1 className="text-4xl font-bold text-white">Habit Tracker</h1>
+        <p className="text-gray-300 mt-2 mb-6">Sign in to continue</p>
+
+        <div className="flex flex-col gap-4">
+          {providers.map((p) => (
+            <AuthButton
+              key={p.name}
+              provider={p.name}
+              logoSrc={p.logo}
+              onClick={() => signInWithProvider(p.name)}
+            >
+              {p.name}
+            </AuthButton>
+          ))}
+        </div>
       </div>
     </div>
   );

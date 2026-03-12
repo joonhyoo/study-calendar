@@ -1,72 +1,30 @@
-import { useContext, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { StyledButton } from "src/components/StyledButton";
-import { useAuthStore } from "src/stores/authStore";
-import AppContext from "src/contexts/AppContextProvider";
+import { Outlet } from "react-router-dom";
+import TabButton from "src/components/TabButton";
+import Header from "src/components/Header";
+
+// tabs outside component stops it being recreated every time
+const tabs = Object.freeze([
+  { id: "today", label: "Today" },
+  { id: "progress", label: "Progress" },
+  { id: "manage", label: "Manage" },
+]);
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState("today");
-  const { loadShuukanData } = useContext(AppContext);
-  const { signOut } = useAuthStore();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate(activeTab);
-  }, [navigate, activeTab]);
-
-  useEffect(() => {
-    loadShuukanData();
-  }, [loadShuukanData]);
-
   return (
     <div className="flex flex-col gap-8 py-8">
-      <h1 className="text-[40px] font-bold">Habit Tracker</h1>
-      <StyledButton onClick={() => signOut()} content={"Sign Out"} />
-      {/* Code taken from Figma Make => transcribed to react using ChatGPT */}
-      <div role="tablist" className="flex justify-center gap-3">
-        <button
-          role="tab"
-          type="button"
-          aria-selected={activeTab === "today"}
-          onClick={() => setActiveTab("today")}
-          className={`px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:cursor-pointer ${
-            activeTab === "today"
-              ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/50"
-              : "bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white hover:shadow-lg"
-          }`}
-        >
-          Today
-        </button>
-
-        <button
-          role="tab"
-          type="button"
-          aria-selected={activeTab === "progress"}
-          onClick={() => setActiveTab("progress")}
-          className={`px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:cursor-pointer ${
-            activeTab === "progress"
-              ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/50"
-              : "bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white hover:shadow-lg"
-          }`}
-        >
-          Progress
-        </button>
-
-        <button
-          role="tab"
-          type="button"
-          aria-selected={activeTab === "manage"}
-          onClick={() => setActiveTab("manage")}
-          className={`px-8 py-3 rounded-xl font-semibold transition-all duration-200 hover:cursor-pointer ${
-            activeTab === "manage"
-              ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/50"
-              : "bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-white hover:shadow-lg"
-          }`}
-        >
-          Manage
-        </button>
-      </div>
-      <Outlet />
+      <Header />
+      <nav
+        role="tablist"
+        className="flex justify-center gap-3"
+        aria-label="Habit tracker sections"
+      >
+        {tabs.map((tab) => (
+          <TabButton key={tab.id} to={tab.id} label={tab.label} />
+        ))}
+      </nav>
+      <main role="tabpanel">
+        <Outlet />
+      </main>
     </div>
   );
 }

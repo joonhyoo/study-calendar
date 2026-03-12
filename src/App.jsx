@@ -18,6 +18,7 @@ function App() {
       </Route>
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Home />}>
+          <Route index element={<Navigate to="today" replace />} />
           <Route path="profile" element={<Profile />} />
           <Route path="today" element={<Today />} />
           <Route path="progress" element={<div>Coming Soon</div>} />
