@@ -87,7 +87,7 @@ const Today = () => {
   return (
     <div>
       {/* Progress Overview Card from Figma Make*/}
-      <div className="bg-[#323334] rounded-2xl p-6 mb-8">
+      <div className="bg-[#2a2b2c] rounded-2xl p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="text-sm text-left text-gray-300 uppercase tracking-wide font-semibold mb-1">
@@ -126,7 +126,7 @@ const Today = () => {
             {shuukanData.map((habit) => (
               <section
                 key={habit.id}
-                className="bg-[#2a2b2c] border border-white/5 rounded-2xl p-6 mb-4"
+                className="bg-[#2a2b2c] border border-white/5 rounded-2xl p-6"
               >
                 {/* Section Header */}
                 <h2 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-5 flex items-center gap-3">
