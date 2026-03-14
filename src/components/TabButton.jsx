@@ -7,7 +7,7 @@ const TabButton = ({ to, label }) => (
     role="tab"
     tabIndex={0}
     className={({ isActive }) =>
-      `flex-1 py-2 text-center text-xs tracking-[0.18em] uppercase transition-all duration-200
+      `flex-1 py-3 text-center text-xs tracking-[0.18em] uppercase transition-all duration-200
        focus:outline-none
        ${
          isActive

@@ -1,72 +1,66 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import HabitEditor from "src/components/HabitEditor";
-import { StyledButton } from "src/components/StyledButton";
-import AppContext from "src/contexts/AppContextProvider";
-import supabase from "src/services/supabase";
+import { useEffect, useState } from "react";
+import ReorderButtons from "src/components/ReorderButtons";
+import HabitBlock from "src/components/HabitBlock";
+import AddHabitForm from "src/components/AddHabitForm";
+import { useHabitStore } from "src/stores/habitStore";
+import { PRESET_COLORS } from "src/utils/helpers.js";
 
+// ── Page ──────────────────────────────────────────────────────────────────────
 function HabitSettings() {
-  const { shuukanData } = useContext(AppContext);
-  const [tempHabits, setTempHabits] = useState([]);
-  const navigate = useNavigate();
+  const shuukanData = useHabitStore((s) => s.shuukanData);
+  const fetchLatest = useHabitStore((s) => s.fetchLatest);
+  const [addingHabit, setAddingHabit] = useState(false);
 
   useEffect(() => {
-    if (!shuukanData) return;
-    setTempHabits(shuukanData);
-  }, [shuukanData]);
+    fetchLatest();
+  }, [fetchLatest]);
 
-  const generateUniqueID = () => {
-    return Math.random().toString().slice(2, 11);
-  };
+  const sorted = [...(shuukanData || [])].sort((a, b) => a.order - b.order);
 
-  const handleArchiveHabit = (habitId) => {
-    const temp = [...tempHabits];
-    const index = temp.findIndex((habit) => habit.id === habitId);
-    if (index > -1) {
-      temp.splice(index, 1);
-    }
-    setTempHabits(temp);
-    archiveHabit(habitId);
-  };
-
-  const archiveHabit = async (habitId) => {
-    const { error } = await supabase
-      .from("habit")
-      .update({ visible: false })
-      .eq("id", habitId);
-    if (error) console.error(error.message);
-  };
-
-  const insertHabit = async ({ title, id, hexcode }) => {
-    const { error } = await supabase
-      .from("habit")
-      .insert({ title: title, hexcode: hexcode, id: id });
-    if (error) console.error(error.message);
-  };
-
-  const handleAddHabit = () => {
-    const id = generateUniqueID();
-    const temp = [...tempHabits];
-    const newHabit = { title: "habit title", id: id, habit_material: [] };
-    temp.push(newHabit);
-    insertHabit(newHabit);
-    setTempHabits(temp);
-  };
+  if (!shuukanData)
+    return (
+      <div className="flex items-center justify-center py-20">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#5a5a52]">
+          Loading...
+        </p>
+      </div>
+    );
 
   return (
-    <div className="flex flex-col gap-[48px]">
-      <div className="flex flex-col gap-[32px]">
-        {tempHabits.map((habit) => (
-          <HabitEditor
+    <div className="max-w-2xl mx-auto py-10 px-6">
+      <div className="mb-10">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-[#c8622a] mb-2">
+          Manage
+        </p>
+        <h1 className="font-serif text-4xl tracking-tight text-[#e8e4dc] leading-none">
+          Your <em className="italic text-[#c8622a]">habits.</em>
+        </h1>
+        <p className="text-xs text-neutral-500 tracking-wide mt-2">
+          Add new categories, habits, or click edit to make changes.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3 mb-6">
+        {sorted.map((habit, i) => (
+          <HabitBlock
             key={habit.id}
             habit={habit}
-            handleArchiveHabit={handleArchiveHabit}
+            isFirst={i === 0}
+            isLast={i === sorted.length - 1}
           />
         ))}
       </div>
-      <div className="flex justify-center">
-        <StyledButton onClick={handleAddHabit} content="add habit" />
-      </div>
+
+      {addingHabit ? (
+        <AddHabitForm onClose={() => setAddingHabit(false)} />
+      ) : (
+        <button
+          onClick={() => setAddingHabit(true)}
+          className="w-full py-3 border border-dashed border-[#232320] text-[0.65rem] tracking-[0.18em] uppercase text-[#5a5a52] hover:border-[#c8622a] hover:text-[#c8622a] transition-all"
+        >
+          + add category
+        </button>
+      )}
     </div>
   );
 }

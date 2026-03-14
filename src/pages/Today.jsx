@@ -99,7 +99,7 @@ const Today = () => {
       <div className="border border-[#232320] p-6 mb-10">
         <div className="flex items-end justify-between mb-5">
           <div>
-            <p className="text-[0.6rem] tracking-[0.18em] uppercase text-[#5a5a52] mb-2">
+            <p className="text-[0.6rem] tracking-[0.18em] uppercase text-gray-400 mb-2">
               Overall Progress
             </p>
             <p className="font-serif text-5xl leading-none text-[#c8622a] italic">
@@ -145,7 +145,7 @@ const Today = () => {
                     className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                     style={{ backgroundColor: habit.hexcode || "#c8622a" }}
                   />
-                  <h2 className="text-[0.65rem] tracking-[0.18em] uppercase text-[#5a5a52]">
+                  <h2 className="text-[0.65rem] tracking-[0.18em] uppercase text-gray-400">
                     {habit.title}
                   </h2>
                 </div>

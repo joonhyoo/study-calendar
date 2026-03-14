@@ -6,7 +6,9 @@ import { useHabitStore } from "src/stores/habitStore";
 function HabitCard({ title, id, hexcode, todayCount, goal }) {
   const [isHovering, setIsHovering] = useState(false);
   const done = todayCount >= goal;
-  const updateHabit = useHabitStore((state) => state.updateHabit);
+  const updateMaterialCount = useHabitStore(
+    (state) => state.updateMaterialCount
+  );
 
   return (
     <div className="flex flex-col items-center gap-4 px-5 py-7 bg-[#0e0e0d]">
@@ -57,7 +59,7 @@ function HabitCard({ title, id, hexcode, todayCount, goal }) {
       <button
         type="button"
         disabled={done}
-        onClick={() => !done && updateHabit(id, todayCount + 1)}
+        onClick={() => !done && updateMaterialCount(id, todayCount + 1)}
         onMouseEnter={() => !done && setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
         className="w-full py-2 text-[0.65rem] tracking-[0.18em] uppercase transition-all duration-200 border"

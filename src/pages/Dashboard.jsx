@@ -12,7 +12,7 @@ const tabs = Object.freeze([
 export default function Dashboard() {
   return (
     <div className="flex flex-col gap-8 pb-8 w-full items-center">
-      <Header />
+      <Header isSignOut />
       <nav
         role="tablist"
         className="flex justify-center gap-3 px-4 w-full max-w-4xl"

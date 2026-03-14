@@ -32,10 +32,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="today" element={<Today />} />
           <Route path="progress" element={<div>Coming Soon</div>} />
-          <Route
-            path="manage"
-            element={<div>Patching things up</div> /*<HabitSettings />*/}
-          />
+          <Route path="manage" element={<HabitSettings />} />
         </Route>
       </Route>
     </Routes>

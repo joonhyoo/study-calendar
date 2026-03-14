@@ -22,7 +22,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#0e0e0d] flex flex-col items-center justify-between w-full">
-      <Header isSignIn />
+      <Header />
       <div className="w-full max-w-sm">
         {/* Header */}
         <div className="mb-10">
