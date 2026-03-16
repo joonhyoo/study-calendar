@@ -8,12 +8,18 @@ export const useAuthStore = create((set) => ({
   // Call once on app mount. Resolves the initial session AND listens for
   // the SIGNED_IN event that fires when Chrome restores the OAuth redirect.
   initAuth: () => {
+    // Immediately restore session so routes don't flash with user: null
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      set({ user: session?.user ?? null, isLoading: false });
+    });
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       set({ user: session?.user ?? null, isLoading: false });
     });
-    return () => subscription.unsubscribe(); // return cleanup for useEffect
+
+    return () => subscription.unsubscribe();
   },
 
   signInWithProvider: async (provider) => {
@@ -26,7 +32,7 @@ export const useAuthStore = create((set) => ({
       },
     });
     if (error) set({ isLoading: false });
-    return { error, user: data?.user ?? null };
+    return { error };
   },
 
   signOut: async () => {
