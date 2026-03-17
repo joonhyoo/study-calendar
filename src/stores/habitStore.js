@@ -100,19 +100,33 @@ export const useHabitStore = create((set, get) => ({
     }));
   },
 
-  archiveHabit: async (habitId) => {
+  deleteHabit: async (habitId) => {
     set((state) => ({
       shuukanData: state.shuukanData.filter((h) => h.id !== habitId),
     }));
 
-    const { error } = await supabase
-      .from("habit")
-      .update({ visible: false })
-      .eq("id", habitId);
-    if (error) {
-      console.error(error.message);
-      return;
-    }
+    const res = await supabase.from("habit").delete().eq("id", habitId);
+    console.log(res);
+  },
+
+  deleteMaterial: async (habitId, materialId) => {
+    set((state) => ({
+      shuukanData: state.shuukanData.map((h) =>
+        h.id === habitId
+          ? {
+              ...h,
+              materials: h.materials.filter(
+                (m) => m.material_id !== materialId
+              ),
+            }
+          : h
+      ),
+    }));
+    const response = await supabase
+      .from("habit_material")
+      .delete()
+      .eq("id", materialId);
+    console.log(response);
   },
 
   updateHabitMeta: async (habitId, patch) => {
