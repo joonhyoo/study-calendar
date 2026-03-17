@@ -40,17 +40,6 @@ function HabitSettings() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 mb-6">
-        {sorted.map((habit, i) => (
-          <HabitBlock
-            key={habit.id}
-            habit={habit}
-            isFirst={i === 0}
-            isLast={i === sorted.length - 1}
-          />
-        ))}
-      </div>
-
       {addingHabit ? (
         <AddHabitForm onClose={() => setAddingHabit(false)} />
       ) : (
@@ -61,6 +50,17 @@ function HabitSettings() {
           + add category
         </button>
       )}
+
+      <div className="flex flex-col gap-3 mt-6">
+        {sorted.map((habit, i) => (
+          <HabitBlock
+            key={habit.id}
+            habit={habit}
+            isFirst={i === 0}
+            isLast={i === sorted.length - 1}
+          />
+        ))}
+      </div>
     </div>
   );
 }
