@@ -3,51 +3,47 @@ import supabase from "src/services/supabase";
 
 export const useAuthStore = create((set) => ({
   user: null,
-  session: null,
-  isLoading: true,
+  isLoading: true, // start true — we don't know yet
 
-  initAuth: async () => {
-    // 1️⃣ restore session immediately
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    set({
-      session,
-      user: session?.user ?? null,
-      isLoading: false,
+  // Call once on app mount. Resolves the initial session AND listens for
+  // the SIGNED_IN event that fires when Chrome restores the OAuth redirect.
+  initAuth: () => {
+    // Immediately restore session so routes don't flash with user: null
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      set({ user: session?.user ?? null, isLoading: false });
     });
 
-    // 2️⃣ listen for OAuth redirect + auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      set({
-        session,
-        user: session?.user ?? null,
-        isLoading: false,
-      });
-
-      // handle OAuth redirect
-      if (event === "SIGNED_IN") {
-        window.location.replace("/dashboard");
-      }
+      set({ user: session?.user ?? null, isLoading: false });
     });
 
     return () => subscription.unsubscribe();
   },
 
   signInWithProvider: async (provider) => {
-    return supabase.auth.signInWithOAuth({
+    set({ isLoading: true });
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: `${window.location.origin}/dashboard`,
+        queryParams: { access_type: "offline", prompt: "consent" },
       },
     });
+    if (error) set({ isLoading: false });
+    return { error };
   },
 
   signOut: async () => {
-    await supabase.auth.signOut();
-    set({ user: null, session: null });
+    set({ isLoading: true });
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+    } catch (error) {
+      console.error("Error signing out:", error.message);
+    } finally {
+      set({ user: null, isLoading: false });
+    }
   },
 }));
