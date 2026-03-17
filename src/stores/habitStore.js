@@ -87,7 +87,6 @@ export const useHabitStore = create((set, get) => ({
         id,
         title: title,
         hexcode: hexcode,
-        visible: true,
       });
 
       if (error) throw error;
